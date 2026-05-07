@@ -8,7 +8,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Pretendard:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
-    /* ── Reset & Base ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
       --bg:       #F5F3EE;
@@ -39,10 +38,8 @@
       min-height: 100vh;
     }
 
-    /* ── Layout ── */
     .page { max-width: 780px; margin: 0 auto; padding: 0 1.5rem 6rem; }
 
-    /* ── Header ── */
     header {
       padding: 3rem 0 2.5rem;
       border-bottom: 1px solid var(--border);
@@ -88,12 +85,8 @@
       font-size: 11px;
       color: var(--sub);
     }
-    .legend-dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-    }
+    .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
 
-    /* ── Section Label ── */
     .section-label {
       font-family: var(--mono);
       font-size: 10px;
@@ -103,7 +96,6 @@
       margin-bottom: 0.75rem;
     }
 
-    /* ── Search ── */
     .search-wrap { position: relative; margin-bottom: 1.5rem; }
     .search-box {
       width: 100%;
@@ -156,7 +148,6 @@
       color: var(--faint);
     }
 
-    /* ── Score Badge ── */
     .badge {
       font-family: var(--mono);
       font-size: 11px;
@@ -171,7 +162,6 @@
     .badge-1 { background: var(--green-bg);  color: var(--green);  }
     .badge-0 { background: #F0EFEC;          color: var(--faint);  }
 
-    /* ── Drug List ── */
     .drug-list { margin-bottom: 2rem; }
     .drug-empty {
       padding: 2rem;
@@ -220,7 +210,6 @@
     }
     .remove-btn:hover { color: var(--red); background: var(--red-bg); }
 
-    /* ── Result Card ── */
     .result-card {
       border-radius: 14px;
       overflow: hidden;
@@ -240,7 +229,7 @@
       gap: 1rem;
     }
     .rh-safe   { background: var(--green-bg);  border-bottom: 1px solid #C8E6CA; }
-    .rh-low    { background: var(--yellow-bg); border-bottom: 1px solid #F5DFA0; }
+    .rh-low    { background: var(--green-bg);  border-bottom: 1px solid #C8E6CA; }
     .rh-medium { background: var(--yellow-bg); border-bottom: 1px solid #F5DFA0; }
     .rh-high   { background: var(--red-bg);    border-bottom: 1px solid #F5C6C6; }
 
@@ -251,17 +240,16 @@
       margin-bottom: 4px;
     }
     .rh-safe   .score-big { color: var(--green);  }
-    .rh-low    .score-big { color: var(--yellow); }
+    .rh-low    .score-big { color: var(--green);  }
     .rh-medium .score-big { color: var(--yellow); }
     .rh-high   .score-big { color: var(--red);    }
 
     .score-label { font-size: 13px; font-weight: 500; }
     .rh-safe   .score-label { color: var(--green);  }
-    .rh-low    .score-label { color: var(--yellow); }
+    .rh-low    .score-label { color: var(--green);  }
     .rh-medium .score-label { color: var(--yellow); }
     .rh-high   .score-label { color: var(--red);    }
 
-    /* traffic light */
     .traffic { display: flex; flex-direction: column; gap: 5px; }
     .tl-dot { width: 16px; height: 16px; border-radius: 50%; }
     .tl-dot.on-green  { background: #2D6A30; }
@@ -269,7 +257,6 @@
     .tl-dot.on-red    { background: #C0392B; }
     .tl-dot.off       { background: #D8D4CE; }
 
-    /* score bar */
     .score-bar-section {
       padding: 1.25rem 1.75rem;
       background: var(--surface);
@@ -295,7 +282,6 @@
       color: var(--faint);
     }
 
-    /* drug score rows */
     .drug-scores-section {
       padding: 1.25rem 1.75rem;
       background: var(--surface);
@@ -337,7 +323,6 @@
       font-size: 14px;
     }
 
-    /* recommendation */
     .rec-section {
       background: var(--surface);
       border-top: 1px solid var(--border);
@@ -352,7 +337,18 @@
     }
     .rec-header-icon { font-size: 15px; }
     .rec-header-text { font-size: 13px; font-weight: 600; color: var(--red); }
-    .rec-body { padding: 1.25rem 1.75rem; }
+    .rec-disclaimer {
+      margin: 1rem 1.75rem 0;
+      padding: 10px 14px;
+      background: #FFFBF0;
+      border: 1px solid #F0D080;
+      border-radius: 8px;
+      font-size: 12px;
+      color: #7A5C00;
+      line-height: 1.7;
+    }
+    .rec-disclaimer strong { font-weight: 600; }
+    .rec-body { padding: 1rem 1.75rem 1.25rem; }
     .rec-drug { margin-bottom: 1.25rem; }
     .rec-drug:last-child { margin-bottom: 0; }
     .rec-drug-title {
@@ -381,7 +377,6 @@
       font-style: italic;
     }
 
-    /* ── ACB 설명 섹션 ── */
     .acb-explain {
       margin-bottom: 2.5rem;
       padding: 1.5rem;
@@ -419,20 +414,6 @@
       color: var(--sub);
     }
 
-    /* ── 대체 약물 면책 고지 ── */
-    .rec-disclaimer {
-      margin: 0 1.75rem 1rem;
-      padding: 10px 14px;
-      background: #FFFBF0;
-      border: 1px solid #F0D080;
-      border-radius: 8px;
-      font-size: 12px;
-      color: #7A5C00;
-      line-height: 1.7;
-    }
-    .rec-disclaimer strong { font-weight: 600; }
-
-    /* ── Info Box ── */
     .info-box {
       margin-top: 2.5rem;
       padding: 1.25rem 1.5rem;
@@ -465,7 +446,6 @@
     }
     .info-cell-desc { font-size: 12px; color: var(--sub); }
 
-    /* ── Footer ── */
     footer {
       margin-top: 4rem;
       padding-top: 1.5rem;
@@ -476,7 +456,6 @@
     }
     footer a { color: var(--faint); text-decoration: underline; }
 
-    /* ── Responsive ── */
     @media (max-width: 540px) {
       .di-class-tag { display: none; }
       .result-header { flex-direction: column; }
@@ -487,10 +466,9 @@
 <body>
 <div class="page">
 
-  <!-- Header -->
   <header>
     <div class="header-label">Anticholinergic Cognitive Burden Scale</div>
-    <h1>ACB <em>Calculator</em></h1>
+    <h1><span style="color:#C0392B">A</span><span style="color:#D4A017">C</span><span style="color:#2D6A30">B</span> <em>Calculator</em></h1>
     <p class="header-sub">다제약물 복용자를 위한 항콜린성 부담 자동 계산기. 처방 약물을 입력하면 ACB 총점과 대체 약물을 추천합니다.</p>
     <div class="acb-scale-legend">
       <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>ACB 1 — Weak</div>
@@ -499,38 +477,31 @@
     </div>
   </header>
 
-  <!-- ACB 설명 -->
   <div class="acb-explain">
-    <h2>항콜린성 부담(ACB)이란?</h2>
+    <h2>항콜린 부담(anticholinergic burden)이란?</h2>
     <p>
-      <strong>항콜린성 약물</strong>은 신경전달물질인 아세틸콜린의 작용을 차단하는 약물입니다.
-      단독 복용 시에는 부작용이 미미하더라도, 여러 약물을 동시에 복용하면
-      항콜린성 효과가 <strong>누적(burden)</strong>되어 심각한 부작용으로 이어질 수 있습니다.
+      항히스타민제, 진정 수면제, 항우울제, 과민성 방광 치료제 등 다양한 약물군에서
+      항콜린 작용이 나타날 수 있으며, 이를 병용 시 항콜린 작용은 <strong>누적</strong>되며
+      이를 <strong>항콜린 부담(anticholinergic burden)</strong>이라 한다.
     </p>
     <p>
-      특히 <strong>노인 환자</strong>는 신장·간 기능 저하로 약물 배설이 느리고,
-      혈뇌장벽 투과성이 증가하여 중추신경계 부작용에 더 취약합니다.
-      누적 ACB 점수가 높을수록 <strong>인지기능 저하, 낙상, 섬망, 요실금, 변비</strong> 등의
-      위험이 유의미하게 증가합니다.
-    </p>
-    <p>
-      ACB Scale은 Boustani et al. (2008)이 개발한 도구로,
-      약물별 항콜린성 강도를 0~3점으로 분류하고 합산하여 총 부담을 정량화합니다.
-      총점 <strong>3점 이상</strong>이면 처방 재검토가 권고됩니다.
+      다제약물 복용자는 <strong>연령에 관계 없이</strong> 약물 상호 작용 및 누적 부작용에
+      노출될 위험이 있다. 단순한 입마름이나 변비를 넘어
+      <strong>인지 기능 저하, 환각, 섬망, 낙상으로 인한 골절</strong> 등
+      삶의 질을 파괴하고 생명을 위협하는 치명적인 결과로 이어질 수 있다.
     </p>
     <div class="acb-tags">
       <span class="acb-tag">인지기능 저하</span>
-      <span class="acb-tag">낙상 위험 증가</span>
-      <span class="acb-tag">섬망</span>
-      <span class="acb-tag">요실금</span>
+      <span class="acb-tag">낙상 · 골절</span>
+      <span class="acb-tag">섬망 · 환각</span>
+      <span class="acb-tag">입마름</span>
       <span class="acb-tag">변비</span>
-      <span class="acb-tag">구강건조</span>
+      <span class="acb-tag">요실금</span>
       <span class="acb-tag">빈맥</span>
       <span class="acb-tag">시야 흐림</span>
     </div>
   </div>
 
-  <!-- Search -->
   <div class="section-label">약물 검색</div>
   <div class="search-wrap">
     <input class="search-box" id="searchInput" type="text"
@@ -538,19 +509,16 @@
     <div class="dropdown" id="dropdown"></div>
   </div>
 
-  <!-- Drug List -->
   <div class="section-label">추가된 약물</div>
   <div class="drug-list" id="drugList">
     <div class="drug-empty">약물을 검색해서 추가해 주세요.</div>
   </div>
 
-  <!-- Result -->
   <div id="resultSection" style="display:none;">
     <div class="section-label">ACB 분석 결과</div>
     <div class="result-card" id="resultCard"></div>
   </div>
 
-  <!-- Info Box -->
   <div class="info-box">
     <h3>ACB 점수 기준</h3>
     <div class="info-grid">
@@ -573,7 +541,6 @@
     </div>
   </div>
 
-  <!-- Footer -->
   <footer>
     <p>참고 문헌: Boustani et al. (2008) · Salahudeen et al., <em>BMC Geriatrics</em> (2015) · Köşker et al., <em>BMC Pharmacology and Toxicology</em> (2025)</p>
     <p style="margin-top:4px">본 계산기는 임상 의사결정 보조 도구이며, 최종 처방 결정은 의료 전문가에게 있습니다.</p>
