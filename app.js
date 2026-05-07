@@ -175,6 +175,7 @@ function renderResult() {
         <div class="rec-disclaimer">
           📋 <strong>대체 약물 추천 기준:</strong> 동일한 적응증을 가지지만, 더 낮은 ACB 점수를 가진 약물입니다.<br>
           ⚠️ <strong>주의 사항:</strong> 아래 약물은 완전히 동일한 효능을 가지는 약물이 아닙니다. 개별 환자의 상태·병용 약물·금기증에 따라 적합성이 다를 수 있으므로, <strong>최종 처방 변경은 반드시 의료 전문가와 상담하세요.</strong>
+          💊 <strong>제형 안내:</strong> 동일 성분이라도 제형(경구, 흡입제, 패취, 주사 등)에 따라 전신 흡수량이 달라 ACB 점수가 다르게 적용될 수 있습니다. 예를 들어 흡입제는 경구제보다 전신 항콜린 작용이 적어 ACB 점수가 낮게 평가됩니다.
         </div>
         <div class="rec-body">${recItems}</div>
       </div>`;
