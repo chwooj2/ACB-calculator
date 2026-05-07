@@ -186,6 +186,12 @@ function renderResult() {
           <span class="rec-header-icon">⚠</span>
           <span class="rec-header-text">총점 ${total}점 — 대체 약물 추천</span>
         </div>
+        <div class="rec-disclaimer">
+          <strong>주의:</strong> 아래 약물은 동일 계열 또는 유사 효능군의 저항콜린성 대안입니다.
+          완전히 동일한 적응증이나 효능을 보장하지 않으며,
+          개별 환자의 상태·병용 약물·금기증에 따라 적합성이 다를 수 있습니다.
+          <strong>최종 처방 변경은 반드시 의료 전문가와 상담하세요.</strong>
+        </div>
         <div class="rec-body">${recItems}</div>
       </div>`;
   }
