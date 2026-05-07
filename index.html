@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ACB Calculator — 항콜린성 부담 계산기</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Pretendard:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:       #F5F3EE;
+      --surface:  #FFFFFF;
+      --border:   #E2DDD6;
+      --border2:  #CCC8BF;
+      --text:     #1A1814;
+      --sub:      #6B6560;
+      --faint:    #9B9590;
+      --green:    #2D6A30;
+      --green-bg: #EAF3EB;
+      --yellow:   #8A6200;
+      --yellow-bg:#FDF6E3;
+      --red:      #9B2020;
+      --red-bg:   #FDEAEA;
+      --accent:   #2D6A30;
+      --mono:     'JetBrains Mono', monospace;
+      --serif:    'DM Serif Display', serif;
+      --sans:     'Pretendard', -apple-system, sans-serif;
+    }
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-weight: 400;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ── Layout ── */
+    .page { max-width: 780px; margin: 0 auto; padding: 0 1.5rem 6rem; }
+
+    /* ── Header ── */
+    header {
+      padding: 3rem 0 2.5rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 2.5rem;
+    }
+    .header-label {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--faint);
+      margin-bottom: 0.75rem;
+    }
+    header h1 {
+      font-family: var(--serif);
+      font-size: clamp(28px, 5vw, 42px);
+      font-weight: 400;
+      line-height: 1.15;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+    header h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+    .header-sub {
+      font-size: 14px;
+      color: var(--sub);
+      max-width: 480px;
+      line-height: 1.7;
+    }
+    .acb-scale-legend {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.25rem;
+      flex-wrap: wrap;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--sub);
+    }
+    .legend-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+    }
+
+    /* ── Section Label ── */
+    .section-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--faint);
+      margin-bottom: 0.75rem;
+    }
+
+    /* ── Search ── */
+    .search-wrap { position: relative; margin-bottom: 1.5rem; }
+    .search-box {
+      width: 100%;
+      padding: 14px 18px;
+      font-size: 15px;
+      font-family: var(--sans);
+      border: 1.5px solid var(--border2);
+      border-radius: 10px;
+      background: var(--surface);
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .search-box:focus { border-color: var(--accent); }
+    .search-box::placeholder { color: var(--faint); }
+
+    .dropdown {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0; right: 0;
+      background: var(--surface);
+      border: 1.5px solid var(--border2);
+      border-radius: 10px;
+      z-index: 200;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+      display: none;
+    }
+    .dropdown.open { display: block; }
+    .dropdown-item {
+      padding: 11px 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.1s;
+    }
+    .dropdown-item:last-child { border-bottom: none; }
+    .dropdown-item:hover { background: var(--bg); }
+    .di-left { flex: 1; min-width: 0; }
+    .di-en { font-size: 14px; font-weight: 500; color: var(--text); }
+    .di-kr { font-size: 12px; color: var(--sub); margin-top: 1px; }
+    .di-class { font-size: 11px; color: var(--faint); }
+    .no-result {
+      padding: 16px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--faint);
+    }
+
+    /* ── Score Badge ── */
+    .badge {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 500;
+      padding: 3px 9px;
+      border-radius: 999px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .badge-3 { background: var(--red-bg);    color: var(--red);    }
+    .badge-2 { background: var(--yellow-bg); color: var(--yellow); }
+    .badge-1 { background: var(--green-bg);  color: var(--green);  }
+    .badge-0 { background: #F0EFEC;          color: var(--faint);  }
+
+    /* ── Drug List ── */
+    .drug-list { margin-bottom: 2rem; }
+    .drug-empty {
+      padding: 2rem;
+      text-align: center;
+      border: 1.5px dashed var(--border2);
+      border-radius: 10px;
+      font-size: 14px;
+      color: var(--faint);
+    }
+    .drug-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 6px;
+      animation: slideIn 0.2s ease;
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .di-name { flex: 1; }
+    .di-name-en { font-size: 14px; font-weight: 500; }
+    .di-name-kr { font-size: 12px; color: var(--sub); }
+    .di-class-tag {
+      font-size: 11px;
+      color: var(--sub);
+      background: var(--bg);
+      padding: 3px 8px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+    .remove-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--faint);
+      font-size: 16px;
+      padding: 4px 6px;
+      border-radius: 6px;
+      line-height: 1;
+      transition: color 0.15s, background 0.15s;
+    }
+    .remove-btn:hover { color: var(--red); background: var(--red-bg); }
+
+    /* ── Result Card ── */
+    .result-card {
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      margin-bottom: 1.5rem;
+      animation: fadeUp 0.3s ease;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .result-header {
+      padding: 1.5rem 1.75rem;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .rh-safe   { background: var(--green-bg);  border-bottom: 1px solid #C8E6CA; }
+    .rh-low    { background: var(--yellow-bg); border-bottom: 1px solid #F5DFA0; }
+    .rh-medium { background: var(--yellow-bg); border-bottom: 1px solid #F5DFA0; }
+    .rh-high   { background: var(--red-bg);    border-bottom: 1px solid #F5C6C6; }
+
+    .score-big {
+      font-family: var(--serif);
+      font-size: 52px;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .rh-safe   .score-big { color: var(--green);  }
+    .rh-low    .score-big { color: var(--yellow); }
+    .rh-medium .score-big { color: var(--yellow); }
+    .rh-high   .score-big { color: var(--red);    }
+
+    .score-label { font-size: 13px; font-weight: 500; }
+    .rh-safe   .score-label { color: var(--green);  }
+    .rh-low    .score-label { color: var(--yellow); }
+    .rh-medium .score-label { color: var(--yellow); }
+    .rh-high   .score-label { color: var(--red);    }
+
+    /* traffic light */
+    .traffic { display: flex; flex-direction: column; gap: 5px; }
+    .tl-dot { width: 16px; height: 16px; border-radius: 50%; }
+    .tl-dot.on-green  { background: #2D6A30; }
+    .tl-dot.on-yellow { background: #D4A017; }
+    .tl-dot.on-red    { background: #C0392B; }
+    .tl-dot.off       { background: #D8D4CE; }
+
+    /* score bar */
+    .score-bar-section {
+      padding: 1.25rem 1.75rem;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+    .bar-track {
+      height: 8px;
+      background: var(--bg);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 6px;
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+    }
+    .bar-marks {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--faint);
+    }
+
+    /* drug score rows */
+    .drug-scores-section {
+      padding: 1.25rem 1.75rem;
+      background: var(--surface);
+    }
+    .ds-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--faint);
+      margin-bottom: 10px;
+    }
+    .ds-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+    .ds-row:last-child { border-bottom: none; }
+    .ds-en { flex: 1; font-weight: 500; }
+    .ds-kr { color: var(--sub); font-size: 12px; }
+    .ds-bar { display: flex; gap: 3px; }
+    .ds-pip { width: 10px; height: 10px; border-radius: 2px; }
+    .pip-filled-3 { background: var(--red); }
+    .pip-filled-2 { background: var(--yellow); }
+    .pip-filled-1 { background: var(--green); }
+    .pip-empty    { background: var(--border2); }
+
+    .ds-total-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1.5px solid var(--border2);
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    /* recommendation */
+    .rec-section {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+    }
+    .rec-header {
+      padding: 1rem 1.75rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--red-bg);
+      border-bottom: 1px solid #F5C6C6;
+    }
+    .rec-header-icon { font-size: 15px; }
+    .rec-header-text { font-size: 13px; font-weight: 600; color: var(--red); }
+    .rec-body { padding: 1.25rem 1.75rem; }
+    .rec-drug { margin-bottom: 1.25rem; }
+    .rec-drug:last-child { margin-bottom: 0; }
+    .rec-drug-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    .rec-drug-name { font-size: 13px; font-weight: 600; }
+    .rec-drug-kr   { font-size: 12px; color: var(--sub); }
+    .alt-pills { display: flex; flex-wrap: wrap; gap: 5px; }
+    .alt-pill {
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: var(--green-bg);
+      color: var(--green);
+      border: 1px solid #C8E6CA;
+      font-weight: 500;
+    }
+    .no-alt {
+      font-size: 12px;
+      color: var(--faint);
+      font-style: italic;
+    }
+
+    /* ── Info Box ── */
+    .info-box {
+      margin-top: 2.5rem;
+      padding: 1.25rem 1.5rem;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--surface);
+    }
+    .info-box h3 {
+      font-family: var(--serif);
+      font-size: 16px;
+      font-weight: 400;
+      margin-bottom: 0.75rem;
+      color: var(--text);
+    }
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 0.75rem;
+    }
+    .info-cell {
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+    .info-cell-score {
+      font-family: var(--mono);
+      font-size: 18px;
+      font-weight: 500;
+      margin-bottom: 2px;
+    }
+    .info-cell-desc { font-size: 12px; color: var(--sub); }
+
+    /* ── Footer ── */
+    footer {
+      margin-top: 4rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--faint);
+      line-height: 1.8;
+    }
+    footer a { color: var(--faint); text-decoration: underline; }
+
+    /* ── Responsive ── */
+    @media (max-width: 540px) {
+      .di-class-tag { display: none; }
+      .result-header { flex-direction: column; }
+      .traffic { flex-direction: row; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <header>
+    <div class="header-label">Anticholinergic Cognitive Burden Scale</div>
+    <h1>ACB <em>Calculator</em></h1>
+    <p class="header-sub">다제약물 복용자를 위한 항콜린성 부담 자동 계산기. 처방 약물을 입력하면 ACB 총점과 대체 약물을 추천합니다.</p>
+    <div class="acb-scale-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>ACB 1 — Weak</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--yellow)"></div>ACB 2 — Moderate</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div>ACB 3 — Strong</div>
+    </div>
+  </header>
+
+  <!-- Search -->
+  <div class="section-label">약물 검색</div>
+  <div class="search-wrap">
+    <input class="search-box" id="searchInput" type="text"
+           placeholder="약물명 입력 — 영문 / 한글 / 상품명 (예: 클로르페니라민, Cetirizine, 지르텍)" autocomplete="off" />
+    <div class="dropdown" id="dropdown"></div>
+  </div>
+
+  <!-- Drug List -->
+  <div class="section-label">추가된 약물</div>
+  <div class="drug-list" id="drugList">
+    <div class="drug-empty">약물을 검색해서 추가해 주세요.</div>
+  </div>
+
+  <!-- Result -->
+  <div id="resultSection" style="display:none;">
+    <div class="section-label">ACB 분석 결과</div>
+    <div class="result-card" id="resultCard"></div>
+  </div>
+
+  <!-- Info Box -->
+  <div class="info-box">
+    <h3>ACB 점수 기준</h3>
+    <div class="info-grid">
+      <div class="info-cell">
+        <div class="info-cell-score" style="color:var(--faint)">0점</div>
+        <div class="info-cell-desc">항콜린성 부담 없음<br>Safe</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-cell-score" style="color:var(--green)">1점</div>
+        <div class="info-cell-desc">낮은 위험<br>Weak / Low Risk</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-cell-score" style="color:var(--yellow)">2점</div>
+        <div class="info-cell-desc">중등 위험 — 주의<br>Moderate Risk</div>
+      </div>
+      <div class="info-cell" style="border-color:#F5C6C6">
+        <div class="info-cell-score" style="color:var(--red)">≥3점</div>
+        <div class="info-cell-desc">고위험 — 처방 재검토<br>High Risk</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>참고 문헌: Boustani et al. (2008) · Salahudeen et al., <em>BMC Geriatrics</em> (2015) · Köşker et al., <em>BMC Pharmacology and Toxicology</em> (2025)</p>
+    <p style="margin-top:4px">본 계산기는 임상 의사결정 보조 도구이며, 최종 처방 결정은 의료 전문가에게 있습니다.</p>
+  </footer>
+
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
