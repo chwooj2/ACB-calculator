@@ -381,6 +381,57 @@
       font-style: italic;
     }
 
+    /* ── ACB 설명 섹션 ── */
+    .acb-explain {
+      margin-bottom: 2.5rem;
+      padding: 1.5rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+    .acb-explain h2 {
+      font-family: var(--serif);
+      font-size: 18px;
+      font-weight: 400;
+      margin-bottom: 0.75rem;
+      color: var(--text);
+    }
+    .acb-explain p {
+      font-size: 13.5px;
+      color: var(--sub);
+      line-height: 1.8;
+      margin-bottom: 0.6rem;
+    }
+    .acb-explain p:last-child { margin-bottom: 0; }
+    .acb-explain strong { color: var(--text); font-weight: 600; }
+    .acb-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 1rem;
+    }
+    .acb-tag {
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: var(--bg);
+      border: 1px solid var(--border2);
+      color: var(--sub);
+    }
+
+    /* ── 대체 약물 면책 고지 ── */
+    .rec-disclaimer {
+      margin: 0 1.75rem 1rem;
+      padding: 10px 14px;
+      background: #FFFBF0;
+      border: 1px solid #F0D080;
+      border-radius: 8px;
+      font-size: 12px;
+      color: #7A5C00;
+      line-height: 1.7;
+    }
+    .rec-disclaimer strong { font-weight: 600; }
+
     /* ── Info Box ── */
     .info-box {
       margin-top: 2.5rem;
@@ -447,6 +498,37 @@
       <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div>ACB 3 — Strong</div>
     </div>
   </header>
+
+  <!-- ACB 설명 -->
+  <div class="acb-explain">
+    <h2>항콜린성 부담(ACB)이란?</h2>
+    <p>
+      <strong>항콜린성 약물</strong>은 신경전달물질인 아세틸콜린의 작용을 차단하는 약물입니다.
+      단독 복용 시에는 부작용이 미미하더라도, 여러 약물을 동시에 복용하면
+      항콜린성 효과가 <strong>누적(burden)</strong>되어 심각한 부작용으로 이어질 수 있습니다.
+    </p>
+    <p>
+      특히 <strong>노인 환자</strong>는 신장·간 기능 저하로 약물 배설이 느리고,
+      혈뇌장벽 투과성이 증가하여 중추신경계 부작용에 더 취약합니다.
+      누적 ACB 점수가 높을수록 <strong>인지기능 저하, 낙상, 섬망, 요실금, 변비</strong> 등의
+      위험이 유의미하게 증가합니다.
+    </p>
+    <p>
+      ACB Scale은 Boustani et al. (2008)이 개발한 도구로,
+      약물별 항콜린성 강도를 0~3점으로 분류하고 합산하여 총 부담을 정량화합니다.
+      총점 <strong>3점 이상</strong>이면 처방 재검토가 권고됩니다.
+    </p>
+    <div class="acb-tags">
+      <span class="acb-tag">인지기능 저하</span>
+      <span class="acb-tag">낙상 위험 증가</span>
+      <span class="acb-tag">섬망</span>
+      <span class="acb-tag">요실금</span>
+      <span class="acb-tag">변비</span>
+      <span class="acb-tag">구강건조</span>
+      <span class="acb-tag">빈맥</span>
+      <span class="acb-tag">시야 흐림</span>
+    </div>
+  </div>
 
   <!-- Search -->
   <div class="section-label">약물 검색</div>
