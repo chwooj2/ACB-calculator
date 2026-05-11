@@ -3387,7 +3387,7 @@ const BRAND_MAP = {
 
   // 0점 약물 상품명
   "글루코바이정":"Acarbose",
-  "게보린브이이정":"Acetaminophen",
+  "게보린브이정":"Acetaminophen",
   "경동아세트아미노펜정":"Acetaminophen",
   "나나정":"Acetaminophen",
   "나스펜시럽":"Acetaminophen",
@@ -3414,7 +3414,6 @@ const BRAND_MAP = {
   "건트라셋서방정":"Acetaminophen",
   "건트라셋정":"Acetaminophen",
   "건트라셋세미서방정":"Acetaminophen",
-  "게보린브이이정":"Acetaminophen",
   "게보린정":"Acetaminophen",
   "게보린쿨다운정":"Acetaminophen",
   "고프레노즈연질캡슐":"Acetaminophen",
@@ -20072,7 +20071,7 @@ const BRAND_MAP = {
   "액티마정":"Pyridoxine",
   "액티바이정":"Pyridoxine",
   "액티브비타맥스큐정":"Pyridoxine",
-  "액티브이인연질캡슐":"Pyridoxine",
+  "액티브이연질캡슐":"Pyridoxine",
   "액티비씨정":"Pyridoxine",
   "액티엠메트정":"Pyridoxine",
   "액티엠정":"Pyridoxine",
