@@ -307,7 +307,8 @@ const INGREDIENT_DB = [
   {en:"Zafirlukast", kr:"자피를루카스트", score:0, level:"Safe", classKR:"천식 치료제"},
   {en:"Zinc preparations", kr:"아연 제제", score:0, level:"Safe", classKR:"미네랄제제"},
   {en:"Zolmitriptan", kr:"졸미트립탄", score:0, level:"Safe", classKR:"진통제"},
-  // ACB 3점 (Strong)
+  
+  // ACB 3점 (Strong) — 엑셀 DB 기준 41종
   {en:"Amitriptyline",      kr:"아미트리프틸린",        score:3, level:"Strong",   classKR:"삼환계 항우울제"},
   {en:"Atropine",           kr:"아트로핀",              score:3, level:"Strong",   classKR:"진경제/항무스카린제"},
   {en:"Benztropine",        kr:"벤즈트로핀",            score:3, level:"Strong",   classKR:"항파킨슨제"},
@@ -315,6 +316,7 @@ const INGREDIENT_DB = [
   {en:"Carbinoxamine",      kr:"카르비녹사민",           score:3, level:"Strong",   classKR:"항히스타민제"},
   {en:"Chlorpheniramine",   kr:"클로르페니라민",         score:3, level:"Strong",   classKR:"항히스타민제"},
   {en:"Chlorpromazine",     kr:"클로르프로마진",         score:3, level:"Strong",   classKR:"항정신병약"},
+  {en:"Cimetropium",        kr:"시메트로피움",           score:3, level:"Strong",   classKR:"위장관 진경제"},
   {en:"Clemastine",         kr:"클레마스틴",             score:3, level:"Strong",   classKR:"항히스타민제"},
   {en:"Clomipramine",       kr:"클로미프라민",           score:3, level:"Strong",   classKR:"삼환계 항우울제"},
   {en:"Clozapine",          kr:"클로자핀",               score:3, level:"Strong",   classKR:"비정형 항정신병제"},
@@ -333,6 +335,7 @@ const INGREDIENT_DB = [
   {en:"Meclizine",          kr:"메클리진",               score:3, level:"Strong",   classKR:"항구토제/항현훈제"},
   {en:"Mequitazine",        kr:"메퀴타진",               score:3, level:"Strong",   classKR:"항히스타민제"},
   {en:"Nortriptyline",      kr:"노르트립틸린",           score:3, level:"Strong",   classKR:"항우울제"},
+  {en:"Octylonium bromide", kr:"옥틸로늄 브롬화물",       score:3, level:"Strong",   classKR:"위장관 진경제"},
   {en:"Olanzapine",         kr:"올란자핀",               score:3, level:"Strong",   classKR:"항정신병약"},
   {en:"Orphenadrine",       kr:"오르페나드린",           score:3, level:"Strong",   classKR:"근이완제"},
   {en:"Oxybutynin",         kr:"옥시부티닌",             score:3, level:"Strong",   classKR:"비뇨기계 진경제"},
@@ -348,7 +351,7 @@ const INGREDIENT_DB = [
   {en:"Trihexyphenidyl",    kr:"트리헥시페니딜",         score:3, level:"Strong",   classKR:"항파킨슨제"},
   {en:"Trospium",           kr:"트로스피움",             score:3, level:"Strong",   classKR:"비뇨기계 진경제"},
 
-  // ACB 2점 (Moderate)
+  // ACB 2점 (Moderate) — 엑셀 DB 기준 22종
   {en:"Amantadine",         kr:"아만타딘",               score:2, level:"Moderate", classKR:"항파킨슨제"},
   {en:"Cimetidine",         kr:"시메티딘",               score:2, level:"Moderate", classKR:"H2 차단제"},
   {en:"Clidinium",          kr:"클리디늄",               score:2, level:"Moderate", classKR:"위장관 항콜린제"},
@@ -372,7 +375,7 @@ const INGREDIENT_DB = [
   {en:"Triprolidine",       kr:"트리프로리딘",           score:2, level:"Moderate", classKR:"항히스타민제"},
   {en:"Zotepine",           kr:"조테핀",                 score:2, level:"Moderate", classKR:"항정신병약"},
 
-  // ACB 1점 (Weak)
+  // ACB 1점 (Weak) — 엑셀 DB 기준 50종
   {en:"Alprazolam",         kr:"알프라졸람",             score:1, level:"Weak",     classKR:"항불안제"},
   {en:"Amisulpride",        kr:"아미설프리드",           score:1, level:"Weak",     classKR:"항정신병약"},
   {en:"Aripiprazole",       kr:"아리피프라졸",           score:1, level:"Weak",     classKR:"항정신병약"},
@@ -394,10 +397,14 @@ const INGREDIENT_DB = [
   {en:"Emedastine",         kr:"에메다스틴",             score:1, level:"Weak",     classKR:"항히스타민제"},
   {en:"Escitalopram",       kr:"에스시탈로프람",         score:1, level:"Weak",     classKR:"항우울제"},
   {en:"Fentanyl",           kr:"펜타닐",                 score:1, level:"Weak",     classKR:"진통제"},
+  {en:"Flunitrazepam",      kr:"플루니트라제팜",         score:1, level:"Weak",     classKR:"수면제"},
   {en:"Fluoxetine",         kr:"플루옥세틴",             score:1, level:"Weak",     classKR:"항우울제 (SSRI)"},
+  {en:"Flurazepam",         kr:"플루라제팜",             score:1, level:"Weak",     classKR:"수면제"},
   {en:"Furosemide",         kr:"푸로세미드",             score:1, level:"Weak",     classKR:"이뇨제"},
+  {en:"Guaifenesin",        kr:"구아이페네신",           score:1, level:"Weak",     classKR:"거담제"},
   {en:"Haloperidol",        kr:"할로페리돌",             score:1, level:"Weak",     classKR:"항정신병약"},
   {en:"Hydralazine",        kr:"하이드랄라진",           score:1, level:"Weak",     classKR:"혈압강하제"},
+  {en:"Hydrocodone",        kr:"하이드로코돈",           score:1, level:"Weak",     classKR:"진통제"},
   {en:"Hydrocortisone",     kr:"하이드로코르티손",       score:1, level:"Weak",     classKR:"스테로이드"},
   {en:"Ketotifen",          kr:"케토티펜",               score:1, level:"Weak",     classKR:"항히스타민제"},
   {en:"Levocetirizine",     kr:"레보세티리진",           score:1, level:"Weak",     classKR:"항히스타민제"},
