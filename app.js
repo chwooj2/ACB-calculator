@@ -105,7 +105,7 @@ function scorePips(score) {
 
 function getRiskInfo(total) {
   if (total === 0) return { cls:'rh-safe',   label:'안전합니다 😊 처방대로 복용하세요.',          tl:'green'  };
-  if (total === 1) return { cls:'rh-low',    label:'안전합니다 😊 처방대로 복용하세요.',          tl:'green'  };
+  if (total === 1) return { cls:'rh-low',    label:'위험도가 낮습니다 😊 처방대로 복용하세요.',     tl:'green'  };
   if (total === 2) return { cls:'rh-medium', label:'약 복용 주의! ⚠️ 전문가와 상담하세요.',      tl:'yellow' };
   return               { cls:'rh-high',   label:'약 복용 위험!! 🚨 즉시 조정이 필요합니다.',  tl:'red'    };
 }
