@@ -23894,7 +23894,24 @@ const ALTERNATIVE_MAP = {
   "Dexbrompheniramine": ["Cyproheptadine","Triprolidine","Cetirizine","Desloratadine","Emedastine","Ketotifen","Levocetirizine","Loratadine","Azelastine","Bepotastine","Ebastine","Epinastine","Fexofenadine","Mizolastine","Olopatadine","Oxatomide"],
   "Dexchlorpheniramine":["Cyproheptadine","Triprolidine","Cetirizine","Desloratadine","Emedastine","Ketotifen","Levocetirizine","Loratadine","Azelastine","Bepotastine","Ebastine","Epinastine","Fexofenadine","Mizolastine","Olopatadine","Oxatomide"],
   "Dicyclomine":        ["Alverine","Fenoverine","Papaverine","Tiropramide"],
-  "Dimenhydrinate":     ["Cetirizine","Loratadine","Difenidol","Betahistine"],
+  "Dimenhydrinate": {
+    _type: "multi-purpose",
+    purposes: [
+      {
+        label: "항구토제 (Antiemetic) 목적",
+        note: "항구토 목적의 직접 대체약물 없음 — 의료진 상담 필요",
+        alts: []
+      },
+      {
+        label: "항히스타민제 (Antihistamine) 목적",
+        alts: ["Fexofenadine","Azelastine","Bepotastine","Ebastine","Epinastine","Mizolastine","Olopatadine","Oxatomide","Emedastine","Cetirizine","Ketotifen","Levocetirizine","Loratadine","Desloratadine","Cyproheptadine","Triprolidine"]
+      },
+      {
+        label: "항현훈제 (Antivertigo) 목적",
+        alts: ["Betahistine","Difenidol"]
+      }
+    ]
+  },
   "Diphenhydramine":    ["Cyproheptadine","Triprolidine","Cetirizine","Desloratadine","Emedastine","Ketotifen","Levocetirizine","Loratadine","Azelastine","Bepotastine","Ebastine","Epinastine","Fexofenadine","Mizolastine","Olopatadine","Oxatomide"],
   "Doxepin":            ["Paroxetine","Bupropion","Citalopram","Desvenlafaxine","Escitalopram","Fluoxetine","Mirtazapine","Trazodone","Venlafaxine","Duloxetine","Sertraline","Tianeptine"],
   "Doxylamine":         ["Cyproheptadine","Triprolidine","Cetirizine","Desloratadine","Emedastine","Ketotifen","Levocetirizine","Loratadine","Azelastine","Bepotastine","Ebastine","Epinastine","Fexofenadine","Mizolastine","Olopatadine","Oxatomide"],
@@ -23903,7 +23920,24 @@ const ALTERNATIVE_MAP = {
   "Hydroxyzine":        ["Cyproheptadine","Triprolidine","Cetirizine","Desloratadine","Emedastine","Ketotifen","Levocetirizine","Loratadine","Azelastine","Bepotastine","Ebastine","Epinastine","Fexofenadine","Mizolastine","Olopatadine","Oxatomide"],
   "Imidafenacin":       [],
   "Imipramine":         ["Paroxetine","Bupropion","Citalopram","Desvenlafaxine","Escitalopram","Fluoxetine","Mirtazapine","Trazodone","Venlafaxine","Duloxetine","Sertraline","Tianeptine"],
-  "Meclizine":          ["Difenidol","Betahistine"],
+  "Meclizine": {
+    _type: "multi-purpose",
+    purposes: [
+      {
+        label: "항구토제 (Antiemetic) 목적",
+        note: "항구토 목적의 직접 대체약물 없음 — 의료진 상담 필요",
+        alts: []
+      },
+      {
+        label: "항현훈제 (Antivertigo) 목적",
+        alts: ["Betahistine","Difenidol"]
+      },
+      {
+        label: "항히스타민제 (Antihistamine) 목적",
+        alts: ["Fexofenadine","Azelastine","Bepotastine","Ebastine","Epinastine","Mizolastine","Olopatadine","Oxatomide","Emedastine","Cetirizine","Ketotifen","Levocetirizine","Loratadine","Desloratadine","Cyproheptadine","Triprolidine"]
+      }
+    ]
+  },
   "Mequitazine":        ["Cyproheptadine","Triprolidine","Cetirizine","Desloratadine","Emedastine","Ketotifen","Levocetirizine","Loratadine","Azelastine","Bepotastine","Ebastine","Epinastine","Fexofenadine","Mizolastine","Olopatadine","Oxatomide"],
   "Nortriptyline":      ["Bupropion","Citalopram","Escitalopram","Mirtazapine","Trazodone","Duloxetine","Sertraline","Tianeptine"],
   "Octylonium Bromide": ["Alverine","Fenoverine","Papaverine","Tiropramide"],
