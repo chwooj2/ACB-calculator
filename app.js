@@ -84,7 +84,7 @@ function openDropdown(results) {
         const scoreColor = comp.score === 3 ? '#C0392B'
                          : comp.score === 2 ? '#8A6200'
                          : comp.score >= 1  ? '#2D6A30' : '#9B9590';
-        return `<span style="font-size:13px;padding:3px 9px;border-radius:999px;border:1px solid #E2DDD6;background:var(--surface);color:${scoreColor};font-weight:500;">${comp.en} <span style="font-size:11px;opacity:0.7;">ACB ${comp.score ?? '-'}</span></span>`;
+        return `<span style="font-size:13px;padding:3px 9px;border-radius:999px;border:1px solid #C8C4BE;background:var(--surface);color:${scoreColor};font-weight:600;">${comp.en} <span style="font-size:11px;opacity:0.8;">ACB ${comp.score ?? '-'}</span></span>`;
       }).join('');
 
       const allAdded = d.components.every(c => selectedDrugs.find(s => s.en === c.en));
