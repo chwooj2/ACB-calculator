@@ -13,6 +13,7 @@ function searchDrug(query) {
   const seen = new Set();
   const alreadyAdded = new Set(selectedDrugs.map(d => d.en));
 
+  // 1) 성분명 검색 (영문 + 한글)
   for (const drug of INGREDIENT_DB) {
     if (alreadyAdded.has(drug.en)) continue;
     if (seen.has(drug.en)) continue;
@@ -22,6 +23,27 @@ function searchDrug(query) {
     }
   }
 
+  // 2) 복합제 브랜드명 검색
+  const complexMatches = [];
+  for (const [brand, ingredients] of Object.entries(COMPLEX_DRUG_MAP)) {
+    if (normalize(brand).includes(q)) {
+      complexMatches.push({ brand, ingredients });
+    }
+  }
+
+  if (complexMatches.length > 0) {
+    // 복합제 결과를 맨 앞에 표시
+    for (const { brand, ingredients } of complexMatches.slice(0, 3)) {
+      const drugItems = ingredients.map(en => {
+        const drug = INGREDIENT_DB.find(d => d.en === en);
+        return drug ? { ...drug } : { en, kr: en, score: null, level: '-', classKR: '-' };
+      });
+      results.unshift({ _isComplex: true, brandName: brand, components: drugItems });
+    }
+    return results.slice(0, 8);
+  }
+
+  // 3) 단일 브랜드명 검색
   for (const [brand, enName] of Object.entries(BRAND_MAP)) {
     if (normalize(brand).includes(q)) {
       if (seen.has(enName) || alreadyAdded.has(enName)) continue;
@@ -55,19 +77,68 @@ function openDropdown(results) {
   const dd = document.getElementById('dropdown');
   if (!results.length) { closeDropdown(); return; }
 
-  dd.innerHTML = results.map((d, i) => `
-    <div class="dropdown-item" data-idx="${i}">
-      <div class="di-left">
-        <div class="di-en">${d.en}${d.brandMatch ? ` <span style="font-weight:400;color:#9B9590">(${d.brandMatch})</span>` : ''}</div>
-        <div class="di-kr">${d.kr} &middot; <span class="di-class">${d.classKR}</span></div>
-      </div>
-      <span class="badge badge-${d.score}">ACB ${d.score} &middot; ${d.level}</span>
-    </div>
-  `).join('');
+  dd.innerHTML = results.map((d, i) => {
+    // 복합제 카드
+    if (d._isComplex) {
+      const componentRows = d.components.map(comp => {
+        const scoreLabel = comp.score !== null
+          ? `<span class="badge badge-${comp.score}" style="font-size:10px;padding:2px 7px;">ACB ${comp.score}</span>`
+          : `<span class="badge badge-0" style="font-size:10px;padding:2px 7px;">-</span>`;
+        const alreadyIn = selectedDrugs.find(s => s.en === comp.en);
+        return `
+          <div class="complex-component ${alreadyIn ? 'comp-added' : ''}"
+               data-brand="${d.brandName}" data-en="${comp.en}">
+            <div class="comp-info">
+              <span class="comp-en">${comp.en}</span>
+              <span class="comp-kr">${comp.kr !== comp.en ? comp.kr : ''}</span>
+            </div>
+            ${scoreLabel}
+            <span class="comp-add-btn">${alreadyIn ? '✓' : '+'}</span>
+          </div>`;
+      }).join('');
 
-  dd.querySelectorAll('.dropdown-item').forEach((el, i) => {
-    el.addEventListener('click', () => addDrug(results[i]));
+      return `
+        <div class="dropdown-item dropdown-complex-card" style="cursor:default;flex-direction:column;align-items:flex-start;gap:8px;">
+          <div style="display:flex;align-items:center;gap:6px;">
+            <span style="font-size:12px;background:#FFF0F0;color:#C0392B;border:1px solid #F5C6C6;padding:2px 8px;border-radius:4px;font-weight:600;">복합제</span>
+            <span style="font-size:14px;font-weight:600;color:var(--text);">${d.brandName}</span>
+          </div>
+          <div style="font-size:11px;color:var(--sub);margin-top:-4px;">포함 성분을 선택해서 각각 추가하세요</div>
+          <div class="complex-components">${componentRows}</div>
+        </div>`;
+    }
+
+    // 일반 약물
+    return `
+      <div class="dropdown-item" data-idx="${i}">
+        <div class="di-left">
+          <div class="di-en">${d.en}${d.brandMatch ? ` <span style="font-weight:400;color:#9B9590">(${d.brandMatch})</span>` : ''}</div>
+          <div class="di-kr">${d.kr} &middot; <span class="di-class">${d.classKR}</span></div>
+        </div>
+        <span class="badge badge-${d.score}">ACB ${d.score} &middot; ${d.level}</span>
+      </div>`;
+  }).join('');
+
+  // 일반 약물 클릭
+  dd.querySelectorAll('.dropdown-item:not(.dropdown-complex-card)').forEach(el => {
+    const idx = parseInt(el.dataset.idx);
+    if (!isNaN(idx)) el.addEventListener('click', () => addDrug(results[idx]));
   });
+
+  // 복합제 성분 개별 클릭
+  dd.querySelectorAll('.complex-component:not(.comp-added)').forEach(el => {
+    el.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const enName = el.dataset.en;
+      const drug = INGREDIENT_DB.find(d => d.en === enName);
+      if (drug) {
+        addDrug(drug);
+        el.classList.add('comp-added');
+        el.querySelector('.comp-add-btn').textContent = '✓';
+      }
+    });
+  });
+
   dd.classList.add('open');
 }
 
@@ -147,62 +218,14 @@ function renderResult() {
   const totalColor = risk.cls === 'rh-safe' || risk.cls === 'rh-low' ? 'var(--green)'
                    : risk.cls === 'rh-high' ? 'var(--red)' : 'var(--yellow)';
 
-  // ── 대체약물 점수 조회 헬퍼 ──────────────────────────────────
-  function getAltScore(name) {
-    const found = INGREDIENT_DB.find(d => d.en === name);
-    return found ? found.score : null;
-  }
-
-  // ── 대체약물 목록을 ACB 점수별로 그룹화 ──────────────────────
-  function renderAltPillsGrouped(alts) {
-    if (!alts || alts.length === 0) return '';
-    const groups = {};
-    alts.forEach(a => {
-      const score = getAltScore(a);
-      const key = score !== null ? score : 'unknown';
-      if (!groups[key]) groups[key] = [];
-      groups[key].push({ name: a, score });
-    });
-    const sortedKeys = Object.keys(groups).sort((a, b) => Number(a) - Number(b));
-    return sortedKeys.map(key => {
-      const scoreLabel = key === 'unknown' ? '' : `ACB ${key}점`;
-      const pills = groups[key].map(a =>
-        `<span class="alt-pill alt-pill-score-${key !== 'unknown' ? key : 'x'}">${a.name}</span>`
-      ).join('');
-      return `<div class="alt-score-group">
-        ${scoreLabel ? `<span class="alt-score-label">ACB ${key}점</span>` : ''}
-        <div class="alt-pills-row">${pills}</div>
-      </div>`;
-    }).join('');
-  }
-
   let recHTML = '';
   if (needsReview) {
     const highDrugs = selectedDrugs.filter(d => d.score >= 2);
     const recItems = highDrugs.map(d => {
-      const mapEntry = ALTERNATIVE_MAP[d.en];
-      let altHTML = '';
-
-      if (!mapEntry) {
-        altHTML = `<span class="no-alt">대체 약물 없음 — 의료진 상담 필요</span>`;
-      } else if (mapEntry._type === 'multi-purpose') {
-        // 목적별 분리 표시 (Dimenhydrinate, Meclizine 등)
-        altHTML = mapEntry.purposes.map(p => {
-          const pills = p.alts && p.alts.length > 0
-            ? renderAltPillsGrouped(p.alts)
-            : `<span class="no-alt">${p.note || '대체 약물 없음 — 의료진 상담 필요'}</span>`;
-          return `<div class="alt-purpose-group">
-            <div class="alt-purpose-label">📌 ${p.label}</div>
-            ${pills}
-          </div>`;
-        }).join('');
-      } else if (Array.isArray(mapEntry)) {
-        // 일반 약물 — ACB 점수별 그룹화
-        altHTML = mapEntry.length
-          ? renderAltPillsGrouped(mapEntry)
-          : `<span class="no-alt">대체 약물 없음 — 의료진 상담 필요</span>`;
-      }
-
+      const alts = ALTERNATIVE_MAP[d.en] || [];
+      const altHTML = alts.length
+        ? alts.map(a => `<span class="alt-pill">${a}</span>`).join('')
+        : `<span class="no-alt">대체 약물 없음 — 의료진 상담 필요</span>`;
       return `
         <div class="rec-drug">
           <div class="rec-drug-title">
@@ -210,7 +233,7 @@ function renderResult() {
             <span class="rec-drug-name">${d.en}</span>
             <span class="rec-drug-kr">${d.kr}</span>
           </div>
-          <div class="alt-content">${altHTML}</div>
+          <div class="alt-pills">${altHTML}</div>
         </div>`;
     }).join('');
 
