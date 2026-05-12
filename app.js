@@ -218,14 +218,61 @@ function renderResult() {
   const totalColor = risk.cls === 'rh-safe' || risk.cls === 'rh-low' ? 'var(--green)'
                    : risk.cls === 'rh-high' ? 'var(--red)' : 'var(--yellow)';
 
+  // ── 대체약물 ACB 점수 조회 ────────────────────────────────────
+  function getAltScore(name) {
+    const found = INGREDIENT_DB.find(d => d.en === name);
+    return found !== undefined ? found.score : null;
+  }
+
+  // ── 대체약물 목록을 ACB 점수별로 그룹화하여 렌더링 ──────────
+  function renderAltPillsGrouped(alts) {
+    if (!alts || alts.length === 0) return '';
+    const groups = {};
+    alts.forEach(a => {
+      const score = getAltScore(a);
+      const key = score !== null ? score : 'x';
+      if (!groups[key]) groups[key] = [];
+      groups[key].push(a);
+    });
+    const sortedKeys = Object.keys(groups).sort((a, b) => Number(a) - Number(b));
+    return sortedKeys.map(key => {
+      const pills = groups[key].map(a =>
+        `<span class="alt-pill alt-pill-score-${key}">${a}</span>`
+      ).join('');
+      return `<div class="alt-score-group">
+        <span class="alt-score-label">ACB ${key}점</span>
+        <div class="alt-pills-row">${pills}</div>
+      </div>`;
+    }).join('');
+  }
+
   let recHTML = '';
   if (needsReview) {
     const highDrugs = selectedDrugs.filter(d => d.score >= 2);
     const recItems = highDrugs.map(d => {
-      const alts = ALTERNATIVE_MAP[d.en] || [];
-      const altHTML = alts.length
-        ? alts.map(a => `<span class="alt-pill">${a}</span>`).join('')
-        : `<span class="no-alt">대체 약물 없음 — 의료진 상담 필요</span>`;
+      const mapEntry = ALTERNATIVE_MAP[d.en];
+      let altHTML = '';
+
+      if (!mapEntry) {
+        altHTML = `<span class="no-alt">대체 약물 없음 — 의료진 상담 필요</span>`;
+      } else if (mapEntry._type === 'multi-purpose') {
+        // 목적별 분리 표시 (Dimenhydrinate, Meclizine)
+        altHTML = mapEntry.purposes.map(p => {
+          const pills = p.alts && p.alts.length > 0
+            ? renderAltPillsGrouped(p.alts)
+            : `<span class="no-alt">${p.note || '대체 약물 없음 — 의료진 상담 필요'}</span>`;
+          return `<div class="alt-purpose-group">
+            <div class="alt-purpose-label">📌 ${p.label}</div>
+            ${pills}
+          </div>`;
+        }).join('');
+      } else if (Array.isArray(mapEntry)) {
+        // 일반 약물 — ACB 점수별 그룹화
+        altHTML = mapEntry.length
+          ? renderAltPillsGrouped(mapEntry)
+          : `<span class="no-alt">대체 약물 없음 — 의료진 상담 필요</span>`;
+      }
+
       return `
         <div class="rec-drug">
           <div class="rec-drug-title">
@@ -233,7 +280,7 @@ function renderResult() {
             <span class="rec-drug-name">${d.en}</span>
             <span class="rec-drug-kr">${d.kr}</span>
           </div>
-          <div class="alt-pills">${altHTML}</div>
+          <div class="alt-content">${altHTML}</div>
         </div>`;
     }).join('');
 
