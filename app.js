@@ -318,7 +318,7 @@ function renderResult() {
       ${dsRows}
       <div class="ds-total-row">
         <span>총 ACB 점수</span>
-        <span style="font-size:20px;color:${totalColor};font-family:var(--serif)">${total}점</span>
+        <span style="font-size:20px;color:${totalColor};font-family:var(--sans);font-weight:600;">${total}점</span>
       </div>
     </div>
     ${recHTML}
