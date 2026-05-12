@@ -23,7 +23,7 @@ function searchDrug(query) {
     }
   }
 
-  // 2) 복합성분제 브랜드명 검색
+  // 2) 복합제 브랜드명 검색
   const complexMatches = [];
   for (const [brand, ingredients] of Object.entries(COMPLEX_DRUG_MAP)) {
     if (normalize(brand).includes(q)) {
@@ -32,7 +32,7 @@ function searchDrug(query) {
   }
 
   if (complexMatches.length > 0) {
-    // 복합성분제 결과를 맨 앞에 표시
+    // 복합제 결과를 맨 앞에 표시
     for (const { brand, ingredients } of complexMatches.slice(0, 3)) {
       const drugItems = ingredients.map(en => {
         const drug = INGREDIENT_DB.find(d => d.en === en);
@@ -78,29 +78,29 @@ function openDropdown(results) {
   if (!results.length) { closeDropdown(); return; }
 
   dd.innerHTML = results.map((d, i) => {
-    // 복합성분제 카드
+    // 복합제 카드
     if (d._isComplex) {
-      const componentPills = d.components.map(comp => {
-        const scoreColor = comp.score === 3 ? '#C0392B'
-                         : comp.score === 2 ? '#8A6200'
-                         : comp.score >= 1  ? '#2D6A30' : '#9B9590';
-        return `<span style="font-size:13px;padding:3px 9px;border-radius:999px;border:1px solid #C8C4BE;background:var(--surface);color:${scoreColor};font-weight:600;">${comp.en} <span style="font-size:11px;opacity:0.8;">ACB ${comp.score ?? '-'}</span></span>`;
+      const alreadyAll = d.components.every(c => selectedDrugs.find(s => s.en === c.en));
+      const componentRows = d.components.map(comp => {
+        const score = comp.score !== null ? comp.score : 0;
+        return `
+          <div class="complex-comp-row">
+            <div class="comp-info">
+              <span class="comp-en">${comp.en}</span>
+              <span class="comp-kr">${comp.kr !== comp.en ? comp.kr : ''}</span>
+            </div>
+            <span class="badge badge-${score}">ACB ${score}</span>
+          </div>`;
       }).join('');
 
-      const allAdded = d.components.every(c => selectedDrugs.find(s => s.en === c.en));
-
       return `
-        <div class="dropdown-item dropdown-complex-card" style="cursor:default;">
-          <div style="display:flex;align-items:center;gap:6px;">
-            <span style="font-size:12px;background:#EEF1F8;color:#4A5E8A;border:1px solid #B0BDD6;padding:2px 8px;border-radius:4px;font-weight:600;">복합성분제</span>
-            <span style="font-size:14px;font-weight:600;color:var(--text);">${d.brandName}</span>
+        <div class="dropdown-item dropdown-complex-card ${alreadyAll ? 'comp-all-added' : ''}" data-complex-idx="${i}">
+          <div class="complex-card-header">
+            <span class="complex-badge">복합성분제</span>
+            <span class="complex-brand">${d.brandName}</span>
+            ${alreadyAll ? '<span style="font-size:12px;color:#2D6A30;margin-left:auto;">✓ 추가됨</span>' : ''}
           </div>
-          <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:2px;">${componentPills}</div>
-          <button class="complex-add-all-btn ${allAdded ? 'all-added' : ''}"
-                  data-brand="${d.brandName}"
-                  style="margin-top:6px;width:100%;padding:6px;border-radius:7px;border:1px solid ${allAdded ? '#C8E6CA' : '#B0BDD6'};background:${allAdded ? '#EAF3EB' : '#EEF1F8'};color:${allAdded ? '#2D6A30' : '#4A5E8A'};font-size:12px;font-weight:600;cursor:${allAdded ? 'default' : 'pointer'};">
-            ${allAdded ? '✓ 모든 성분 추가됨' : '+ 전체 성분 한 번에 추가'}
-          </button>
+          <div class="complex-comp-list">${componentRows}</div>
         </div>`;
     }
 
@@ -109,36 +109,32 @@ function openDropdown(results) {
       <div class="dropdown-item" data-idx="${i}">
         <div class="di-left">
           <div class="di-en">${d.en}${d.brandMatch ? ` <span style="font-weight:400;color:#9B9590">(${d.brandMatch})</span>` : ''}</div>
-          <div class="di-kr">${d.kr} &middot; <span class="di-class">${d.classKR}</span></div>
+          <div class="di-kr" style="color:#4A4540;">${d.kr} &middot; <span class="di-class">${d.classKR}</span></div>
         </div>
         <span class="badge badge-${d.score}">ACB ${d.score} &middot; ${d.level}</span>
       </div>`;
   }).join('');
 
   // 일반 약물 클릭
-  dd.querySelectorAll('.dropdown-item:not(.dropdown-complex-card)').forEach(el => {
+  dd.querySelectorAll('.dropdown-item[data-idx]').forEach(el => {
     const idx = parseInt(el.dataset.idx);
     if (!isNaN(idx)) el.addEventListener('click', () => addDrug(results[idx]));
   });
 
-  // 복합성분제 전체 추가 버튼
-  dd.querySelectorAll('.complex-add-all-btn:not(.all-added)').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const brandName = btn.dataset.brand;
-      const complexResult = results.find(r => r._isComplex && r.brandName === brandName);
+  // 복합제 카드 클릭 → 모든 성분 자동 추가
+  dd.querySelectorAll('.dropdown-complex-card:not(.comp-all-added)').forEach(el => {
+    el.addEventListener('click', () => {
+      const idx = parseInt(el.dataset.complexIdx);
+      const complexResult = results[idx];
       if (!complexResult) return;
       complexResult.components.forEach(comp => {
         if (comp.score !== null && !selectedDrugs.find(s => s.en === comp.en)) {
-          addDrug(comp);
+          selectedDrugs.push(comp);
         }
       });
-      btn.textContent = '✓ 모든 성분 추가됨';
-      btn.style.background = '#EAF3EB';
-      btn.style.borderColor = '#C8E6CA';
-      btn.style.color = '#2D6A30';
-      btn.style.cursor = 'default';
-      btn.classList.add('all-added');
+      closeDropdown();
+      renderDrugList();
+      renderResult();
     });
   });
 
