@@ -80,31 +80,27 @@ function openDropdown(results) {
   dd.innerHTML = results.map((d, i) => {
     // 복합제 카드
     if (d._isComplex) {
-      const componentRows = d.components.map(comp => {
-        const scoreLabel = comp.score !== null
-          ? `<span class="badge badge-${comp.score}" style="font-size:10px;padding:2px 7px;">ACB ${comp.score}</span>`
-          : `<span class="badge badge-0" style="font-size:10px;padding:2px 7px;">-</span>`;
-        const alreadyIn = selectedDrugs.find(s => s.en === comp.en);
-        return `
-          <div class="complex-component ${alreadyIn ? 'comp-added' : ''}"
-               data-brand="${d.brandName}" data-en="${comp.en}">
-            <div class="comp-info">
-              <span class="comp-en">${comp.en}</span>
-              <span class="comp-kr">${comp.kr !== comp.en ? comp.kr : ''}</span>
-            </div>
-            ${scoreLabel}
-            <span class="comp-add-btn">${alreadyIn ? '✓' : '+'}</span>
-          </div>`;
+      const componentPills = d.components.map(comp => {
+        const scoreColor = comp.score === 3 ? '#C0392B'
+                         : comp.score === 2 ? '#8A6200'
+                         : comp.score >= 1  ? '#2D6A30' : '#9B9590';
+        return `<span style="font-size:11px;padding:2px 7px;border-radius:999px;border:1px solid #E2DDD6;background:var(--surface);color:${scoreColor};font-weight:500;">${comp.en} <span style="font-size:10px;opacity:0.7;">ACB ${comp.score ?? '-'}</span></span>`;
       }).join('');
 
+      const allAdded = d.components.every(c => selectedDrugs.find(s => s.en === c.en));
+
       return `
-        <div class="dropdown-item dropdown-complex-card" style="cursor:default;flex-direction:column;align-items:flex-start;gap:8px;">
+        <div class="dropdown-item dropdown-complex-card" style="cursor:default;">
           <div style="display:flex;align-items:center;gap:6px;">
-            <span style="font-size:12px;background:#EEF1F8;color:#4A5E8A;border:1px solid #B0BDD6;padding:2px 8px;border-radius:4px;font-weight:600;">복합성분제</span>
+            <span style="font-size:12px;background:#EEF1F8;color:#4A5E8A;border:1px solid #B0BDD6;padding:2px 8px;border-radius:4px;font-weight:600;">복합제</span>
             <span style="font-size:14px;font-weight:600;color:var(--text);">${d.brandName}</span>
           </div>
-          <div style="font-size:11px;color:var(--sub);margin-top:-4px;">포함 성분을 선택해서 각각 추가하세요</div>
-          <div class="complex-components">${componentRows}</div>
+          <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:2px;">${componentPills}</div>
+          <button class="complex-add-all-btn ${allAdded ? 'all-added' : ''}"
+                  data-brand="${d.brandName}"
+                  style="margin-top:6px;width:100%;padding:6px;border-radius:7px;border:1px solid ${allAdded ? '#C8E6CA' : '#B0BDD6'};background:${allAdded ? '#EAF3EB' : '#EEF1F8'};color:${allAdded ? '#2D6A30' : '#4A5E8A'};font-size:12px;font-weight:600;cursor:${allAdded ? 'default' : 'pointer'};">
+            ${allAdded ? '✓ 모든 성분 추가됨' : '+ 전체 성분 한 번에 추가'}
+          </button>
         </div>`;
     }
 
@@ -125,17 +121,24 @@ function openDropdown(results) {
     if (!isNaN(idx)) el.addEventListener('click', () => addDrug(results[idx]));
   });
 
-  // 복합제 성분 개별 클릭
-  dd.querySelectorAll('.complex-component:not(.comp-added)').forEach(el => {
-    el.addEventListener('click', (e) => {
+  // 복합제 전체 추가 버튼
+  dd.querySelectorAll('.complex-add-all-btn:not(.all-added)').forEach(btn => {
+    btn.addEventListener('click', (e) => {
       e.stopPropagation();
-      const enName = el.dataset.en;
-      const drug = INGREDIENT_DB.find(d => d.en === enName);
-      if (drug) {
-        addDrug(drug);
-        el.classList.add('comp-added');
-        el.querySelector('.comp-add-btn').textContent = '✓';
-      }
+      const brandName = btn.dataset.brand;
+      const complexResult = results.find(r => r._isComplex && r.brandName === brandName);
+      if (!complexResult) return;
+      complexResult.components.forEach(comp => {
+        if (comp.score !== null && !selectedDrugs.find(s => s.en === comp.en)) {
+          addDrug(comp);
+        }
+      });
+      btn.textContent = '✓ 모든 성분 추가됨';
+      btn.style.background = '#EAF3EB';
+      btn.style.borderColor = '#C8E6CA';
+      btn.style.color = '#2D6A30';
+      btn.style.cursor = 'default';
+      btn.classList.add('all-added');
     });
   });
 
