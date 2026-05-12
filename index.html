@@ -152,37 +152,38 @@
     }
     .dropdown-complex-card:hover { background: #F4F6FB !important; }
 
-    .complex-components { display: flex; flex-direction: column; gap: 2px; width: 100%; }
-    .complex-component {
+    /* ── 복합제 카드 ── */
+    .complex-card-header {
       display: flex;
       align-items: center;
-      gap: 5px;
-      padding: 4px 7px;
-      border-radius: 5px;
-      border: 1px solid var(--border);
-      background: var(--surface);
-      cursor: pointer;
-      transition: background 0.12s, border-color 0.12s;
+      gap: 6px;
+      width: 100%;
     }
-    .complex-component:hover { background: var(--green-bg); border-color: #C8E6CA; }
-    .complex-component.comp-added {
-      background: #F0F8F0;
-      border-color: #C8E6CA;
-      cursor: default;
-      opacity: 0.7;
-    }
-    .comp-info { flex: 1; display: flex; flex-direction: column; gap: 1px; }
-    .comp-en { font-size: 11px; font-weight: 500; color: var(--text); }
-    .comp-kr { font-size: 10px; color: var(--sub); }
-    .comp-add-btn {
+    .complex-badge {
       font-size: 11px;
+      background: #EEF1F8;
+      color: #4A5E8A;
+      border: 1px solid #B0BDD6;
+      padding: 2px 7px;
+      border-radius: 4px;
       font-weight: 600;
-      color: var(--green);
-      width: 16px;
-      text-align: center;
       flex-shrink: 0;
     }
-    .comp-added .comp-add-btn { color: var(--faint); }
+    .complex-brand { font-size: 14px; font-weight: 600; color: var(--text); }
+    .complex-comp-list { display: flex; flex-direction: column; gap: 3px; width: 100%; }
+    .complex-comp-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+    }
+    .comp-info { flex: 1; display: flex; flex-direction: column; gap: 1px; }
+    .comp-en { font-size: 12px; font-weight: 600; color: var(--text); }
+    .comp-kr { font-size: 10px; color: var(--sub); }
+    .dropdown-complex-card.comp-all-added { opacity: 0.6; cursor: default; }
 
     .no-result {
       padding: 16px;
