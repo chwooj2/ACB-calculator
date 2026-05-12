@@ -23,7 +23,7 @@ function searchDrug(query) {
     }
   }
 
-  // 2) 복합제 브랜드명 검색
+  // 2) 복합성분제 브랜드명 검색
   const complexMatches = [];
   for (const [brand, ingredients] of Object.entries(COMPLEX_DRUG_MAP)) {
     if (normalize(brand).includes(q)) {
@@ -32,7 +32,7 @@ function searchDrug(query) {
   }
 
   if (complexMatches.length > 0) {
-    // 복합제 결과를 맨 앞에 표시
+    // 복합성분제 결과를 맨 앞에 표시
     for (const { brand, ingredients } of complexMatches.slice(0, 3)) {
       const drugItems = ingredients.map(en => {
         const drug = INGREDIENT_DB.find(d => d.en === en);
@@ -78,7 +78,7 @@ function openDropdown(results) {
   if (!results.length) { closeDropdown(); return; }
 
   dd.innerHTML = results.map((d, i) => {
-    // 복합제 카드
+    // 복합성분제 카드
     if (d._isComplex) {
       const componentPills = d.components.map(comp => {
         const scoreColor = comp.score === 3 ? '#C0392B'
@@ -92,7 +92,7 @@ function openDropdown(results) {
       return `
         <div class="dropdown-item dropdown-complex-card" style="cursor:default;">
           <div style="display:flex;align-items:center;gap:6px;">
-            <span style="font-size:12px;background:#EEF1F8;color:#4A5E8A;border:1px solid #B0BDD6;padding:2px 8px;border-radius:4px;font-weight:600;">복합제</span>
+            <span style="font-size:12px;background:#EEF1F8;color:#4A5E8A;border:1px solid #B0BDD6;padding:2px 8px;border-radius:4px;font-weight:600;">복합성분제</span>
             <span style="font-size:14px;font-weight:600;color:var(--text);">${d.brandName}</span>
           </div>
           <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:2px;">${componentPills}</div>
@@ -121,7 +121,7 @@ function openDropdown(results) {
     if (!isNaN(idx)) el.addEventListener('click', () => addDrug(results[idx]));
   });
 
-  // 복합제 전체 추가 버튼
+  // 복합성분제 전체 추가 버튼
   dd.querySelectorAll('.complex-add-all-btn:not(.all-added)').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
