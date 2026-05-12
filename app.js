@@ -100,7 +100,7 @@ function openDropdown(results) {
       return `
         <div class="dropdown-item dropdown-complex-card" style="cursor:default;flex-direction:column;align-items:flex-start;gap:8px;">
           <div style="display:flex;align-items:center;gap:6px;">
-            <span style="font-size:12px;background:#EEF2FF;color:#2D5BE3;border:1px solid #BDC8F5;padding:2px 8px;border-radius:4px;font-weight:600;">복합성분제</span>
+            <span style="font-size:12px;background:#EEF1F8;color:#4A5E8A;border:1px solid #B0BDD6;padding:2px 8px;border-radius:4px;font-weight:600;">복합성분제</span>
             <span style="font-size:14px;font-weight:600;color:var(--text);">${d.brandName}</span>
           </div>
           <div style="font-size:11px;color:var(--sub);margin-top:-4px;">포함 성분을 선택해서 각각 추가하세요</div>
