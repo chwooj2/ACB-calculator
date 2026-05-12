@@ -404,20 +404,55 @@
     .rec-drug-name { font-size: 13px; font-weight: 600; }
     .rec-drug-kr   { font-size: 12px; color: var(--sub); }
     .alt-pills { display: flex; flex-wrap: wrap; gap: 5px; }
+    /* ── 대체약물 점수별 그룹 ── */
+    .alt-content { display: flex; flex-direction: column; gap: 10px; }
+
+    .alt-score-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+    .alt-score-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      padding: 2px 7px;
+      border-radius: 4px;
+      width: fit-content;
+      background: var(--bg);
+      border: 1px solid var(--border2);
+      color: var(--sub);
+    }
+    .alt-pills-row { display: flex; flex-wrap: wrap; gap: 5px; }
+
+    .alt-pill-score-0 { background: #EAF3EB !important; color: var(--green) !important; border-color: #C8E6CA !important; }
+    .alt-pill-score-1 { background: #EAF3EB !important; color: #1A5E20 !important; border-color: #A5D6A7 !important; }
+    .alt-pill-score-2 { background: #FDF6E3 !important; color: #8A6200 !important; border-color: #F0D080 !important; }
+    .alt-pill-score-x { background: #F0EFEC !important; color: var(--faint) !important; border-color: var(--border2) !important; }
+
+    /* ── 목적별 그룹 (Dimenhydrinate, Meclizine) ── */
+    .alt-purpose-group {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+    .alt-purpose-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+
     .alt-pill {
       font-size: 12px;
       padding: 4px 10px;
       border-radius: 999px;
-      background: var(--green-bg);
-      color: var(--green);
       border: 1px solid #C8E6CA;
       font-weight: 500;
     }
-    .no-alt {
-      font-size: 12px;
-      color: var(--faint);
-      font-style: italic;
-    }
+    .no-alt { font-size: 12px; color: var(--faint); font-style: italic; }
 
     .acb-explain {
       margin-bottom: 2.5rem;
