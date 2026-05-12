@@ -89,7 +89,7 @@ function openDropdown(results) {
               <span class="comp-en">${comp.en}</span>
               <span class="comp-kr">${comp.kr !== comp.en ? comp.kr : ''}</span>
             </div>
-            <span class="badge badge-${score}">ACB ${score}</span>
+            <span class="badge badge-${score}">ACB ${score} &middot; ${comp.level || (score === 0 ? 'Safe' : score === 1 ? 'Weak' : score === 2 ? 'Moderate' : 'Strong')}</span>
           </div>`;
       }).join('');
 
