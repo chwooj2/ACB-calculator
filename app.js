@@ -247,7 +247,9 @@ function renderResult() {
 
   let recHTML = '';
   if (needsReview) {
-    const highDrugs = selectedDrugs.filter(d => d.score >= 2);
+    const highDrugs = total >= 3 && selectedDrugs.every(d => d.score <= 1)
+      ? selectedDrugs.filter(d => d.score >= 1)
+      : selectedDrugs.filter(d => d.score >= 2);
     const recItems = highDrugs.map(d => {
       const mapEntry = ALTERNATIVE_MAP[d.en];
       let altHTML = '';
