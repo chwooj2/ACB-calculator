@@ -319,7 +319,7 @@ function renderResult() {
         <div class="scenario-header">대체 약물 적용 시, 총 ACB 점수 <span style="font-size:11px;color:var(--sub);font-weight:400;">(낮은 것부터 추천)</span></div>
         ${Object.entries(groups).sort((a,b)=>Number(a[0])-Number(b[0])).map(([tot, scens]) => `
           <div class="scenario-group">
-            <div class="scenario-total-label" style="color:${scoreColor(Number(tot))};">총점 ${tot}점</div>
+            <div class="scenario-total-label ${Number(tot) >= 3 ? 'label-red' : Number(tot) === 2 ? 'label-yellow' : ''}">총점 ${tot}점</div>
             <div class="scenario-cards-row">
             ${scens.map(s => `
               <div class="scenario-card">
