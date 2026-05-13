@@ -325,14 +325,14 @@ function renderResult() {
                 ${s.chosen.map(c => {
                   if (c.chosenScore === c.drug.score) return `
                     <div class="scenario-row">
-                      <span class="scenario-drug">${c.drug.en}</span>
+                      <span class="scenario-score-pill score-pill-${c.drug.score}" style="cursor:default;">${c.drug.en}</span>
                       <span class="scenario-arrow">유지</span>
                       <span class="badge badge-${c.drug.score}" style="font-size:11px;">ACB ${c.drug.score}</span>
                     </div>`;
                   const drugList = (c.altScores[c.chosenScore] || []).join(', ');
                   return `
                     <div class="scenario-row">
-                      <span class="scenario-drug">${c.drug.en}</span>
+                      <span class="scenario-score-pill score-pill-${c.drug.score}" style="cursor:default;">${c.drug.en}</span>
                       <span class="scenario-arrow">→</span>
                       <span class="scenario-score-pill score-pill-${c.chosenScore}" data-drugs="${drugList}" onclick="showToast(this)">ACB ${c.chosenScore}점 ▾</span>
                     </div>`;
@@ -409,7 +409,7 @@ function renderResult() {
       ${dsRows}
       <div class="ds-total-row">
         <span>총 ACB 점수</span>
-        <span style="font-size:20px;color:${totalColor};font-family:var(--serif)">${total}점</span>
+        <span style="font-size:20px;color:${totalColor};font-family:var(--sans);font-weight:700;">${total}점</span>
       </div>
     </div>
     ${recHTML}
