@@ -89,7 +89,7 @@ function openDropdown(results) {
               <span class="comp-en">${comp.en}</span>
               <span class="comp-kr">${comp.kr !== comp.en ? comp.kr : ''}</span>
             </div>
-            <span class="badge badge-${score}">ACB ${score} &middot; ${comp.level || (score === 0 ? 'Safe' : score === 1 ? 'Weak' : score === 2 ? 'Moderate' : 'Strong')}</span>
+            <span class="badge badge-${score}">ACB ${score}</span>
           </div>`;
       }).join('');
 
@@ -245,35 +245,123 @@ function renderResult() {
     }).join('');
   }
 
+  // ── 대체약물 점수 필터링 ──────────────────────────────────────
+  function filterAltsByScore(alts, currentScore) {
+    return alts.filter(a => {
+      const s = getAltScore(a);
+      return s !== null && s < currentScore;
+    });
+  }
+
+  // ── 약물별 대체 점수→약물명 매핑 ─────────────────────────────
+  function getAltScoresForDrug(drug) {
+    const mapEntry = ALTERNATIVE_MAP[drug.en];
+    if (!mapEntry) return {};
+    let alts = [];
+    if (mapEntry._type === 'multi-purpose') {
+      mapEntry.purposes.forEach(p => { alts = alts.concat(p.alts || []); });
+    } else if (Array.isArray(mapEntry)) {
+      alts = mapEntry;
+    }
+    const scoreToAlts = {};
+    alts.forEach(a => {
+      const s = getAltScore(a);
+      if (s !== null && s < drug.score) {
+        if (!scoreToAlts[s]) scoreToAlts[s] = [];
+        scoreToAlts[s].push(a);
+      }
+    });
+    return scoreToAlts;
+  }
+
+  // ── 시나리오 생성 (min총점, min+1총점만) ─────────────────────
+  function buildScenarios(drugs, currentTotal) {
+    const targets = drugs.filter(d => d.score >= 1);
+    if (!targets.length) return [];
+    const drugOptions = targets.map(d => {
+      const altScores = getAltScoresForDrug(d);
+      const options = [...new Set([d.score, ...Object.keys(altScores).map(Number).filter(s => s < d.score)])].sort((a,b)=>a-b);
+      return { drug: d, options, altScores };
+    });
+    const scenarios = [];
+    function combine(idx, chosen, total) {
+      if (idx === drugOptions.length) { scenarios.push({ chosen: [...chosen], total }); return; }
+      for (const score of drugOptions[idx].options) {
+        combine(idx+1, [...chosen, { drug: drugOptions[idx].drug, chosenScore: score, altScores: drugOptions[idx].altScores }], total + (score - drugOptions[idx].drug.score));
+      }
+    }
+    combine(0, [], currentTotal);
+    const improved = scenarios.filter(s => s.total < currentTotal).sort((a,b) => a.total - b.total);
+    if (!improved.length) return [];
+    const minTotal = improved[0].total;
+    const seen = new Set();
+    return improved.filter(s => {
+      if (s.total > minTotal + 1) return false;
+      const key = s.chosen.map(c => `${c.drug.en}:${c.chosenScore}`).join('|');
+      if (seen.has(key)) return false;
+      seen.add(key); return true;
+    }).slice(0, 6);
+  }
+
   let recHTML = '';
   if (needsReview) {
-    const highDrugs = total >= 3 && selectedDrugs.every(d => d.score <= 1)
-      ? selectedDrugs.filter(d => d.score >= 1)
-      : selectedDrugs.filter(d => d.score >= 2);
-    const recItems = highDrugs.map(d => {
+    const targetDrugs = selectedDrugs.filter(d => d.score >= 1);
+    const scenarios = buildScenarios(selectedDrugs, total);
+    const scoreColor = (t) => t <= 1 ? '#2D6A30' : t === 2 ? '#8A6200' : '#C0392B';
+    const scoreEmoji = (t) => t <= 1 ? '🟢' : t === 2 ? '🟡' : '🔴';
+
+    // 시나리오 섹션
+    let scenarioHTML = '';
+    if (scenarios.length > 0) {
+      const groups = {};
+      scenarios.forEach(s => { if (!groups[s.total]) groups[s.total] = []; groups[s.total].push(s); });
+      scenarioHTML = `<div class="scenario-section">
+        <div class="scenario-header">성분 대체 시 총점 <span style="font-size:11px;color:var(--sub);font-weight:400;">(낮은 것부터 추천)</span></div>
+        ${Object.entries(groups).sort((a,b)=>Number(a[0])-Number(b[0])).map(([tot, scens]) => `
+          <div class="scenario-group">
+            <div class="scenario-total-label" style="color:${scoreColor(Number(tot))};">${scoreEmoji(Number(tot))} 총점 ${tot}점</div>
+            ${scens.map(s => `
+              <div class="scenario-card">
+                ${s.chosen.map(c => {
+                  if (c.chosenScore === c.drug.score) return `
+                    <div class="scenario-row">
+                      <span class="scenario-drug">${c.drug.en}</span>
+                      <span class="scenario-arrow">유지</span>
+                      <span class="badge badge-${c.drug.score}" style="font-size:11px;">ACB ${c.drug.score}</span>
+                    </div>`;
+                  const drugList = (c.altScores[c.chosenScore] || []).join(', ');
+                  return `
+                    <div class="scenario-row">
+                      <span class="scenario-drug">${c.drug.en}</span>
+                      <span class="scenario-arrow">→</span>
+                      <span class="scenario-score-pill score-pill-${c.chosenScore}" data-drugs="${drugList}" onclick="showToast(this)">ACB ${c.chosenScore}점 ▾</span>
+                    </div>`;
+                }).join('')}
+              </div>`).join('')}
+          </div>`).join('')}
+      </div>`;
+    }
+
+    // 약물별 대체약물 섹션
+    const recItems = targetDrugs.map(d => {
       const mapEntry = ALTERNATIVE_MAP[d.en];
       let altHTML = '';
-
       if (!mapEntry) {
         altHTML = `<span class="no-alt">대체 약물 없음 — 의료진 상담 필요</span>`;
       } else if (mapEntry._type === 'multi-purpose') {
-        // 목적별 분리 표시 (Dimenhydrinate, Meclizine)
         altHTML = mapEntry.purposes.map(p => {
-          const pills = p.alts && p.alts.length > 0
-            ? renderAltPillsGrouped(p.alts)
+          const filteredAlts = filterAltsByScore(p.alts || [], d.score);
+          const pills = filteredAlts.length > 0
+            ? renderAltPillsGrouped(filteredAlts)
             : `<span class="no-alt">${p.note || '대체 약물 없음 — 의료진 상담 필요'}</span>`;
-          return `<div class="alt-purpose-group">
-            <div class="alt-purpose-label">📌 ${p.label}</div>
-            ${pills}
-          </div>`;
+          return `<div class="alt-purpose-group"><div class="alt-purpose-label">📌 ${p.label}</div>${pills}</div>`;
         }).join('');
       } else if (Array.isArray(mapEntry)) {
-        // 일반 약물 — ACB 점수별 그룹화
-        altHTML = mapEntry.length
-          ? renderAltPillsGrouped(mapEntry)
+        const filteredAlts = filterAltsByScore(mapEntry, d.score);
+        altHTML = filteredAlts.length
+          ? renderAltPillsGrouped(filteredAlts)
           : `<span class="no-alt">대체 약물 없음 — 의료진 상담 필요</span>`;
       }
-
       return `
         <div class="rec-drug">
           <div class="rec-drug-title">
@@ -295,6 +383,7 @@ function renderResult() {
           📋 <strong>대체 약물 추천 기준:</strong> 동일한 적응증을 가지지만, 더 낮은 ACB 점수를 가진 약물입니다.<br>
           ⚠️ <strong>주의 사항:</strong> 아래 약물은 완전히 동일한 효능을 가지는 약물이 아닙니다. 개별 환자의 상태·병용 약물·금기증에 따라 적합성이 다를 수 있으므로, <strong>최종 처방 변경은 반드시 의료 전문가와 상담하세요.</strong>
         </div>
+        ${scenarioHTML}
         <div class="rec-body">${recItems}</div>
       </div>`;
   }
@@ -320,7 +409,7 @@ function renderResult() {
       ${dsRows}
       <div class="ds-total-row">
         <span>총 ACB 점수</span>
-        <span style="font-size:20px;color:${totalColor};font-family:var(--sans);font-weight:600;">${total}점</span>
+        <span style="font-size:20px;color:${totalColor};font-family:var(--serif)">${total}점</span>
       </div>
     </div>
     ${recHTML}
@@ -329,6 +418,41 @@ function renderResult() {
   card.style.animation = 'none';
   card.offsetHeight;
   card.style.animation = 'fadeUp 0.3s ease';
+}
+
+// ── 토스트 팝업 ───────────────────────────────────────────────
+function showToast(el) {
+  const drugs = el.dataset.drugs;
+  if (!drugs) return;
+
+  // 기존 토스트 제거
+  document.querySelectorAll('.drug-toast').forEach(t => t.remove());
+
+  const toast = document.createElement('div');
+  toast.className = 'drug-toast';
+  toast.textContent = drugs;
+  document.body.appendChild(toast);
+
+  const rect = el.getBoundingClientRect();
+  toast.style.left = rect.left + window.scrollX + 'px';
+  toast.style.top = rect.bottom + window.scrollY + 8 + 'px';
+
+  // 화면 밖으로 나가면 위로 표시
+  setTimeout(() => {
+    const tRect = toast.getBoundingClientRect();
+    if (tRect.right > window.innerWidth) {
+      toast.style.left = (rect.right + window.scrollX - tRect.width) + 'px';
+    }
+    if (tRect.bottom > window.innerHeight) {
+      toast.style.top = rect.top + window.scrollY - tRect.height - 8 + 'px';
+    }
+  }, 0);
+
+  // 3초 후 자동 제거
+  setTimeout(() => toast.remove(), 3000);
+  document.addEventListener('click', (e) => {
+    if (!toast.contains(e.target) && e.target !== el) toast.remove();
+  }, { once: true });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
