@@ -326,8 +326,7 @@ function renderResult() {
                   if (c.chosenScore === c.drug.score) return `
                     <div class="scenario-row">
                       <span class="scenario-score-pill score-pill-${c.drug.score}" style="cursor:default;">${c.drug.en}</span>
-                      <span class="scenario-arrow">→</span>
-                      <span class="badge badge-${c.drug.score}" style="font-size:11px;">ACB ${c.drug.score}</span>
+                      <span class="badge badge-${c.drug.score}" style="font-size:11px;margin-left:4px;">ACB ${c.drug.score}</span>
                     </div>`;
                   const drugList = (c.altScores[c.chosenScore] || []).join(', ');
                   return `
