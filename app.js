@@ -316,7 +316,7 @@ function renderResult() {
       const groups = {};
       scenarios.forEach(s => { if (!groups[s.total]) groups[s.total] = []; groups[s.total].push(s); });
       scenarioHTML = `<div class="scenario-section">
-        <div class="scenario-header">성분 대체 시 총점 <span style="font-size:11px;color:var(--sub);font-weight:400;">(낮은 것부터 추천)</span></div>
+        <div class="scenario-header">대체 약물 적용 시, 총 ACB 점수 <span style="font-size:11px;color:var(--sub);font-weight:400;">(낮은 것부터 추천)</span></div>
         ${Object.entries(groups).sort((a,b)=>Number(a[0])-Number(b[0])).map(([tot, scens]) => `
           <div class="scenario-group">
             <div class="scenario-total-label" style="color:${scoreColor(Number(tot))};">총점 ${tot}점</div>
