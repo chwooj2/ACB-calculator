@@ -320,6 +320,7 @@ function renderResult() {
         ${Object.entries(groups).sort((a,b)=>Number(a[0])-Number(b[0])).map(([tot, scens]) => `
           <div class="scenario-group">
             <div class="scenario-total-label" style="color:${scoreColor(Number(tot))};">총점 ${tot}점</div>
+            <div class="scenario-cards-row">
             ${scens.map(s => `
               <div class="scenario-card">
                 ${s.chosen.map(c => {
