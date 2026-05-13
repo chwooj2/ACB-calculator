@@ -274,7 +274,7 @@ function renderResult() {
     return scoreToAlts;
   }
 
-  // ── 시나리오 생성 (min총점, min+1총점만) ─────────────────────
+  // ── 시나리오 생성 (min총점, min+1, min+2 / 4점 이상 제외) ────
   function buildScenarios(drugs, currentTotal) {
     const targets = drugs.filter(d => d.score >= 1);
     if (!targets.length) return [];
@@ -291,16 +291,19 @@ function renderResult() {
       }
     }
     combine(0, [], currentTotal);
-    const improved = scenarios.filter(s => s.total < currentTotal).sort((a,b) => a.total - b.total);
+    // 개선된 시나리오 중 총점 3점 이하만 포함
+    const improved = scenarios
+      .filter(s => s.total < currentTotal && s.total <= 3)
+      .sort((a,b) => a.total - b.total);
     if (!improved.length) return [];
     const minTotal = improved[0].total;
     const seen = new Set();
     return improved.filter(s => {
-      if (s.total > minTotal + 1) return false;
+      if (s.total > minTotal + 2) return false;
       const key = s.chosen.map(c => `${c.drug.en}:${c.chosenScore}`).join('|');
       if (seen.has(key)) return false;
       seen.add(key); return true;
-    }).slice(0, 6);
+    }).slice(0, 9);
   }
 
   let recHTML = '';
@@ -338,9 +341,16 @@ function renderResult() {
                     </div>`;
                 }).join('')}
               </div>`).join('')}
-          </div>
+            </div>
+            ${Number(tot) === 3 ? `<div class="scenario-warn">⚠ 총점 3점은 고위험에 해당합니다. 처방 재검토를 권고합니다.</div>` : ''}
           </div>`).join('')}
       </div>`;
+    } else {
+      scenarioHTML = `<div class="scenario-section">
+        <div class="scenario-header">대체 약물 적용 시, 총 ACB 점수</div>
+        <div class="scenario-no-result">대체약물 적용으로 3점 이하 달성이 어렵습니다. 의료진 상담을 권고합니다.</div>
+      </div>`;
+    }
     }
 
     // 약물별 대체약물 섹션
