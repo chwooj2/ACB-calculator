@@ -319,7 +319,7 @@ function renderResult() {
         <div class="scenario-header">성분 대체 시 총점 <span style="font-size:11px;color:var(--sub);font-weight:400;">(낮은 것부터 추천)</span></div>
         ${Object.entries(groups).sort((a,b)=>Number(a[0])-Number(b[0])).map(([tot, scens]) => `
           <div class="scenario-group">
-            <div class="scenario-total-label" style="color:${scoreColor(Number(tot))};">${scoreEmoji(Number(tot))} 총점 ${tot}점</div>
+            <div class="scenario-total-label" style="color:${scoreColor(Number(tot))};">총점 ${tot}점</div>
             ${scens.map(s => `
               <div class="scenario-card">
                 ${s.chosen.map(c => {
@@ -383,8 +383,8 @@ function renderResult() {
           📋 <strong>대체 약물 추천 기준:</strong> 동일한 적응증을 가지지만, 더 낮은 ACB 점수를 가진 약물입니다.<br>
           ⚠️ <strong>주의 사항:</strong> 아래 약물은 완전히 동일한 효능을 가지는 약물이 아닙니다. 개별 환자의 상태·병용 약물·금기증에 따라 적합성이 다를 수 있으므로, <strong>최종 처방 변경은 반드시 의료 전문가와 상담하세요.</strong>
         </div>
-        ${scenarioHTML}
         <div class="rec-body">${recItems}</div>
+        ${scenarioHTML}
       </div>`;
   }
 
