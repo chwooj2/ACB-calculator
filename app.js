@@ -351,7 +351,6 @@ function renderResult() {
         <div class="scenario-no-result">대체약물 적용으로 3점 이하 달성이 어렵습니다. 의료진 상담을 권고합니다.</div>
       </div>`;
     }
-    }
 
     // 약물별 대체약물 섹션
     const recItems = targetDrugs.map(d => {
