@@ -467,9 +467,8 @@
       color: var(--text);
       margin-bottom: 0.75rem;
     }
-    .scenario-group { margin-bottom: 1rem; display: flex; flex-direction: column; gap: 8px; }
+    .scenario-group { margin-bottom: 1rem; }
     .scenario-group:last-child { margin-bottom: 0; }
-    .scenario-cards-row { display: flex; flex-wrap: wrap; gap: 8px; }
     .scenario-total-label {
       font-size: 12px;
       font-weight: 700;
@@ -480,16 +479,6 @@
       background: #EAF3EB;
       color: #1A5E20;
       border: 1px solid #A5D6A7;
-    }
-    .scenario-total-label.label-yellow {
-      background: #FDF6E3;
-      color: #8A6200;
-      border-color: #F0D080;
-    }
-    .scenario-total-label.label-red {
-      background: #FDEAEA;
-      color: #9B2020;
-      border-color: #F5C6C6;
     }
     .scenario-card {
       background: var(--bg);
@@ -544,6 +533,24 @@
     @keyframes toastIn {
       from { opacity: 0; transform: translateY(-4px); }
       to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .scenario-warn {
+      font-size: 12px;
+      color: #9B2020;
+      background: #FDEAEA;
+      border: 1px solid #F5C6C6;
+      border-radius: 6px;
+      padding: 6px 10px;
+      margin-top: 4px;
+    }
+    .scenario-no-result {
+      font-size: 13px;
+      color: #9B2020;
+      background: #FDEAEA;
+      border: 1px solid #F5C6C6;
+      border-radius: 8px;
+      padding: 10px 14px;
     }
 
     .no-alt { font-size: 12px; color: var(--faint); font-style: italic; }
