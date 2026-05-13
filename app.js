@@ -338,6 +338,7 @@ function renderResult() {
                     </div>`;
                 }).join('')}
               </div>`).join('')}
+          </div>
           </div>`).join('')}
       </div>`;
     }
