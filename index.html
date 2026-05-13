@@ -380,7 +380,7 @@
       border-bottom: 1px solid #F5C6C6;
     }
     .rec-header-icon { font-size: 15px; }
-    .rec-header-text { font-size: 13px; font-weight: 600; color: var(--red); }
+    .rec-header-text { font-size: 16px; font-weight: 600; color: var(--red); }
     .rec-disclaimer {
       margin: 1rem 1.75rem 0;
       padding: 10px 14px;
@@ -486,9 +486,10 @@
       border-radius: 8px;
       padding: 8px 12px;
       margin-bottom: 6px;
-      display: flex;
+      display: inline-flex;
       flex-direction: column;
       gap: 5px;
+      min-width: 260px;
     }
     .scenario-row {
       display: flex;
@@ -496,12 +497,12 @@
       gap: 8px;
       font-size: 13px;
     }
-    .scenario-drug { font-weight: 600; color: var(--text); flex: 1; }
-    .scenario-arrow { color: var(--faint); font-size: 12px; }
+    .scenario-drug { font-weight: 600; color: var(--text); }
+    .scenario-arrow { color: var(--text); font-size: 15px; font-weight: 700; }
     .scenario-score-pill {
       font-size: 11px;
       font-weight: 600;
-      padding: 3px 9px;
+      padding: 3px 7px;
       border-radius: 999px;
       cursor: pointer;
       border: 1px solid;
@@ -520,12 +521,12 @@
       z-index: 9999;
       background: #1A1814;
       color: #F5F3EE;
-      font-size: 12px;
-      line-height: 1.6;
-      padding: 8px 12px;
-      border-radius: 8px;
-      max-width: 280px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+      font-size: 14px;
+      line-height: 1.8;
+      padding: 12px 16px;
+      border-radius: 10px;
+      max-width: 340px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.22);
       pointer-events: none;
       animation: toastIn 0.15s ease;
     }
