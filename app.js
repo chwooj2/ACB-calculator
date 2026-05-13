@@ -448,11 +448,12 @@ function showToast(el) {
     }
   }, 0);
 
-  // 3초 후 자동 제거
-  setTimeout(() => toast.remove(), 3000);
-  document.addEventListener('click', (e) => {
-    if (!toast.contains(e.target) && e.target !== el) toast.remove();
-  }, { once: true });
+  // 다른 곳 클릭 시 제거
+  setTimeout(() => {
+    document.addEventListener('click', (e) => {
+      if (!toast.contains(e.target) && e.target !== el) toast.remove();
+    }, { once: true });
+  }, 0);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
