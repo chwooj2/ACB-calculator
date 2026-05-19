@@ -1,4 +1,4 @@
-// ── ACB Calculator — app.js ────────────────────────────────────
+// ── KABS Calculator — app.js ────────────────────────────────────
 
 let selectedDrugs = [];
 
@@ -89,7 +89,7 @@ function openDropdown(results) {
               <span class="comp-en">${comp.en}</span>
               <span class="comp-kr">${comp.kr !== comp.en ? comp.kr : ''}</span>
             </div>
-            <span class="badge badge-${score}">ACB ${score}</span>
+            <span class="badge badge-${score}">KABS ${score}</span>
           </div>`;
       }).join('');
 
@@ -111,7 +111,7 @@ function openDropdown(results) {
           <div class="di-en">${d.en}${d.brandMatch ? ` <span style="font-weight:400;color:#9B9590">(${d.brandMatch})</span>` : ''}</div>
           <div class="di-kr" style="color:#4A4540;">${d.kr} &middot; <span class="di-class">${d.classKR}</span></div>
         </div>
-        <span class="badge badge-${d.score}">ACB ${d.score} &middot; ${d.level}</span>
+        <span class="badge badge-${d.score}">KABS ${d.score} &middot; ${d.level}</span>
       </div>`;
   }).join('');
 
@@ -159,7 +159,7 @@ function renderDrugList() {
         <div class="di-name-kr">${d.kr}</div>
       </div>
       <span class="di-class-tag">${d.classKR}</span>
-      <span class="badge badge-${d.score}">ACB ${d.score}</span>
+      <span class="badge badge-${d.score}">KABS ${d.score}</span>
       <button class="remove-btn" onclick="removeDrug('${d.en}')" title="제거">✕</button>
     </div>
   `).join('');
@@ -174,10 +174,10 @@ function scorePips(score) {
 }
 
 function getRiskInfo(total) {
-  if (total === 0) return { cls:'rh-safe',   label:'안전합니다 😊 처방대로 복용하세요.',          tl:'green'  };
-  if (total === 1) return { cls:'rh-low',    label:'위험도가 낮습니다 😊 처방대로 복용하세요.',     tl:'green'  };
-  if (total === 2) return { cls:'rh-medium', label:'약 복용 주의! ⚠️ 전문가와 상담하세요.',      tl:'yellow' };
-  return               { cls:'rh-high',   label:'약 복용 위험!! 🚨 즉시 조정이 필요합니다.',  tl:'red'    };
+  if (total === 0) return { cls:'rh-safe',   label:'안전합니다 😊 처방대로 복용하세요.',         tl:'green'  };
+  if (total === 1) return { cls:'rh-low',    label:'약한 저위험군입니다 ⚠️ 주의가 필요합니다.',   tl:'yellow' };
+  if (total === 2) return { cls:'rh-medium', label:'중간 저위험군입니다 ⚠️ 전문가와 상담하세요.', tl:'yellow' };
+  return               { cls:'rh-high',   label:'고위험군입니다 🚨 즉시 조정이 필요합니다.',     tl:'red'    };
 }
 
 function trafficLightHTML(color) {
@@ -201,7 +201,7 @@ function renderResult() {
   const total   = selectedDrugs.reduce((s, d) => s + d.score, 0);
   const risk    = getRiskInfo(total);
   const pct     = Math.min((total / Math.max(total, 6)) * 100, 100);
-  const barColor = risk.cls === 'rh-safe' || risk.cls === 'rh-low' ? '#2D6A30'
+  const barColor = risk.cls === 'rh-safe' ? '#2D6A30'
                  : risk.cls === 'rh-high' ? '#C0392B' : '#D4A017';
   const needsReview = total >= 3;
 
@@ -214,16 +214,16 @@ function renderResult() {
     </div>
   `).join('');
 
-  const totalColor = risk.cls === 'rh-safe' || risk.cls === 'rh-low' ? 'var(--green)'
+  const totalColor = risk.cls === 'rh-safe' ? 'var(--green)'
                    : risk.cls === 'rh-high' ? 'var(--red)' : 'var(--yellow)';
 
-  // ── 대체약물 ACB 점수 조회 ────────────────────────────────────
+  // ── 대체약물 KABS 점수 조회 ────────────────────────────────────
   function getAltScore(name) {
     const found = INGREDIENT_DB.find(d => d.en === name);
     return found !== undefined ? found.score : null;
   }
 
-  // ── 대체약물 목록을 ACB 점수별로 그룹화하여 렌더링 ──────────
+  // ── 대체약물 목록을 KABS 점수별로 그룹화하여 렌더링 ──────────
   function renderAltPillsGrouped(alts) {
     if (!alts || alts.length === 0) return '';
     const groups = {};
@@ -239,7 +239,7 @@ function renderResult() {
         `<span class="alt-pill alt-pill-score-${key}">${a}</span>`
       ).join('');
       return `<div class="alt-score-group">
-        <span class="alt-score-label">ACB ${key}점</span>
+        <span class="alt-score-label">KABS ${key}점</span>
         <div class="alt-pills-row">${pills}</div>
       </div>`;
     }).join('');
@@ -310,8 +310,8 @@ function renderResult() {
   if (needsReview) {
     const targetDrugs = selectedDrugs.filter(d => d.score >= 1);
     const scenarios = buildScenarios(selectedDrugs, total);
-    const scoreColor = (t) => t <= 1 ? '#2D6A30' : t === 2 ? '#8A6200' : '#C0392B';
-    const scoreEmoji = (t) => t <= 1 ? '🟢' : t === 2 ? '🟡' : '🔴';
+    const scoreColor = (t) => t === 0 ? '#2D6A30' : t <= 2 ? '#8A6200' : '#C0392B';
+    const scoreEmoji = (t) => t === 0 ? '🟢' : t <= 2 ? '🟡' : '🔴';
 
     // 시나리오 섹션
     let scenarioHTML = '';
@@ -319,10 +319,10 @@ function renderResult() {
       const groups = {};
       scenarios.forEach(s => { if (!groups[s.total]) groups[s.total] = []; groups[s.total].push(s); });
       scenarioHTML = `<div class="scenario-section">
-        <div class="scenario-header">대체 약물 적용 시, 총 ACB 점수 <span style="font-size:11px;color:var(--sub);font-weight:400;">(낮은 것부터 추천)</span></div>
+        <div class="scenario-header">대체 약물 적용 시, 총 KABS 점수 <span style="font-size:11px;color:var(--sub);font-weight:400;">(낮은 것부터 추천)</span></div>
         ${Object.entries(groups).sort((a,b)=>Number(a[0])-Number(b[0])).map(([tot, scens]) => `
           <div class="scenario-group">
-            <div class="scenario-total-label ${Number(tot) >= 3 ? 'label-red' : Number(tot) === 2 ? 'label-yellow' : ''}">총점 ${tot}점</div>
+            <div class="scenario-total-label ${Number(tot) >= 3 ? 'label-red' : Number(tot) === 0 ? '' : 'label-yellow'}">총점 ${tot}점</div>
             <div class="scenario-cards-row">
             ${scens.map(s => `
               <div class="scenario-card">
@@ -330,14 +330,14 @@ function renderResult() {
                   if (c.chosenScore === c.drug.score) return `
                     <div class="scenario-row">
                       <span class="scenario-score-pill score-pill-${c.drug.score}" style="cursor:default;">${c.drug.en}</span>
-                      <span class="badge badge-${c.drug.score}" style="font-size:11px;margin-left:4px;">ACB ${c.drug.score}점</span>
+                      <span class="badge badge-${c.drug.score}" style="font-size:11px;margin-left:4px;">KABS ${c.drug.score}점</span>
                     </div>`;
                   const drugList = (c.altScores[c.chosenScore] || []).join(', ');
                   return `
                     <div class="scenario-row">
                       <span class="scenario-score-pill score-pill-${c.drug.score}" style="cursor:default;">${c.drug.en}</span>
                       <span class="scenario-arrow">→</span>
-                      <span class="scenario-score-pill score-pill-${c.chosenScore}" data-drugs="${drugList}" onclick="showToast(this)">ACB ${c.chosenScore}점 ▾</span>
+                      <span class="scenario-score-pill score-pill-${c.chosenScore}" data-drugs="${drugList}" onclick="showToast(this)">KABS ${c.chosenScore}점 ▾</span>
                     </div>`;
                 }).join('')}
               </div>`).join('')}
@@ -347,7 +347,7 @@ function renderResult() {
       </div>`;
     } else {
       scenarioHTML = `<div class="scenario-section">
-        <div class="scenario-header">대체 약물 적용 시, 총 ACB 점수</div>
+        <div class="scenario-header">대체 약물 적용 시, 총 KABS 점수</div>
         <div class="scenario-no-result">대체약물 적용으로 3점 이하 달성이 어렵습니다. 의료진 상담을 권고합니다.</div>
       </div>`;
     }
@@ -375,7 +375,7 @@ function renderResult() {
       return `
         <div class="rec-drug">
           <div class="rec-drug-title">
-            <span class="badge badge-${d.score}">ACB ${d.score}</span>
+            <span class="badge badge-${d.score}">KABS ${d.score}</span>
             <span class="rec-drug-name">${d.en}</span>
             <span class="rec-drug-kr">${d.kr}</span>
           </div>
@@ -390,7 +390,7 @@ function renderResult() {
           <span class="rec-header-text">총점 ${total}점 — 대체 약물 추천</span>
         </div>
         <div class="rec-disclaimer">
-          📋 <strong>대체 약물 추천 기준:</strong> 동일한 적응증을 가지지만, 더 낮은 ACB 점수를 가진 약물입니다.<br>
+          📋 <strong>대체 약물 추천 기준:</strong> 동일한 적응증을 가지지만, 더 낮은 KABS 점수를 가진 약물입니다.<br>
           ⚠️ <strong>주의 사항:</strong> 아래 약물은 완전히 동일한 효능을 가지는 약물이 아닙니다. 개별 환자의 상태·병용 약물·금기증에 따라 적합성이 다를 수 있으므로, <strong>최종 처방 변경은 반드시 의료 전문가와 상담하세요.</strong>
         </div>
         <div class="rec-body">${recItems}</div>
@@ -415,10 +415,10 @@ function renderResult() {
       </div>
     </div>
     <div class="drug-scores-section">
-      <div class="ds-label">약물별 ACB 점수</div>
+      <div class="ds-label">약물별 KABS 점수</div>
       ${dsRows}
       <div class="ds-total-row">
-        <span>총 ACB 점수</span>
+        <span>총 KABS 점수</span>
         <span style="font-size:20px;color:${totalColor};font-family:var(--sans);font-weight:700;">${total}점</span>
       </div>
     </div>
