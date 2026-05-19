@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ACB Calculator — 항콜린성 부담 계산기</title>
+  <title>KABS Calculator — 항콜린성 부담 계산기</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Pretendard:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -203,7 +203,7 @@
     }
     .badge-3 { background: var(--red-bg);    color: var(--red);    }
     .badge-2 { background: var(--yellow-bg); color: var(--yellow); }
-    .badge-1 { background: var(--green-bg);  color: var(--green);  }
+    .badge-1 { background: var(--yellow-bg); color: var(--yellow); }
     .badge-0 { background: #F0EFEC;          color: #6B6560;  }
 
     .drug-list { margin-bottom: 2rem; }
@@ -353,7 +353,7 @@
     .ds-pip { width: 10px; height: 10px; border-radius: 2px; }
     .pip-filled-3 { background: var(--red); }
     .pip-filled-2 { background: var(--yellow); }
-    .pip-filled-1 { background: var(--green); }
+    .pip-filled-1 { background: var(--yellow); }
     .pip-empty    { background: var(--border2); }
 
     .ds-total-row {
@@ -425,7 +425,7 @@
     .alt-pills-row { display: flex; flex-wrap: wrap; gap: 5px; }
 
     .alt-pill-score-0 { background: #EAF3EB !important; color: var(--green) !important; border-color: #C8E6CA !important; }
-    .alt-pill-score-1 { background: #EAF3EB !important; color: #1A5E20 !important; border-color: #A5D6A7 !important; }
+    .alt-pill-score-1 { background: #FDF6E3 !important; color: #8A6200 !important; border-color: #F0D080 !important; }
     .alt-pill-score-2 { background: #FDF6E3 !important; color: #8A6200 !important; border-color: #F0D080 !important; }
     .alt-pill-score-x { background: #F0EFEC !important; color: var(--faint) !important; border-color: var(--border2) !important; }
 
@@ -521,7 +521,7 @@
     }
     .scenario-score-pill:hover { opacity: 0.75; }
     .score-pill-0 { background: #EAF3EB; color: #1A5E20; border-color: #A5D6A7; }
-    .score-pill-1 { background: #EAF3EB; color: #2D6A30; border-color: #C8E6CA; }
+    .score-pill-1 { background: #FDF6E3; color: #8A6200; border-color: #F0D080; }
     .score-pill-2 { background: #FDF6E3; color: #8A6200; border-color: #F0D080; }
     .score-pill-3 { background: #FDEAEA; color: #9B2020; border-color: #F5C6C6; }
 
@@ -655,14 +655,14 @@
 <div class="page">
 
   <header>
-    <div class="header-label">Anticholinergic Cognitive Burden Scale</div>
-    <h1><span style="color:#C0392B">A</span><span style="color:#D4A017">C</span><span style="color:#2D6A30">B</span> <em style="color:#1A1814">Calculator</em></h1>
-    <p class="header-sub">다제약물 복용자를 위한 항콜린성 부담 자동 계산기.<br>처방 약물을 입력하면 ACB 총점과 대체 약물을 추천합니다.</p>
+    <div class="header-label">Korean Anticholinergic Burden Scale</div>
+    <h1><span style="color:#C0392B">K</span><span style="color:#D4A017">A</span><span style="color:#2D6A30">B</span><span style="color:#1A1814">S</span> <em style="color:#1A1814">Calculator</em></h1>
+    <p class="header-sub">다제약물 복용자를 위한 항콜린성 부담 자동 계산기.<br>처방 약물을 입력하면 KABS 총점과 대체 약물을 추천합니다.</p>
     <div class="acb-scale-legend">
-      <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>ACB 0 — Safe</div>
-      <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>ACB 1 — Weak/Low</div>
-      <div class="legend-item"><div class="legend-dot" style="background:var(--yellow)"></div>ACB 2 — Moderate</div>
-      <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div>ACB 3 — Strong</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>KABS 0 — Safe (비노출군)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--yellow)"></div>KABS 1 — Weak (약한 저위험군)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--yellow)"></div>KABS 2 — Moderate (중간 저위험군)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div>KABS 3 — Strong (고위험군)</div>
     </div>
   </header>
 
@@ -680,7 +680,7 @@
       삶의 질을 파괴하고 생명을 위협하는 치명적인 결과로 이어질 수 있다.
     </p>
     <p style="margin-top:0.75rem; padding:10px 14px; background:#FDF6E3; border:1px solid #F0D080; border-radius:8px; font-size:13px; color:#7A5C00; line-height:1.7;">
-      📊 <strong>실태:</strong> 다제약물 복용자의 약 20~40%가 ACB 3점 이상에 해당한다는 연구 결과가 있으며,
+      📊 <strong>실태:</strong> 다제약물 복용자의 약 20~40%가 KABS 3점 이상에 해당한다는 연구 결과가 있으며,
       65세 이상 노인의 약 50%가 항콜린성 약물을 1개 이상 복용하고 있습니다.
       <em style="font-size:12px;">(Kiesel et al., 2018 · Köşker et al., 2025)</em>
     </p>
@@ -709,34 +709,34 @@
   </div>
 
   <div id="resultSection" style="display:none;">
-    <div class="section-label">ACB 분석 결과</div>
+    <div class="section-label">KABS 분석 결과</div>
     <div class="result-card" id="resultCard"></div>
   </div>
 
   <div class="info-box">
-    <h3><span style="font-family:var(--serif);">ACB</span><span style="font-family:var(--sans);font-weight:600;"> 점수 기준</span></h3>
+    <h3><span style="font-family:var(--serif);">KABS</span><span style="font-family:var(--sans);font-weight:600;"> 점수 기준</span></h3>
     <div class="info-grid">
       <div class="info-cell">
-        <div class="info-cell-score" style="color:var(--faint)">0점</div>
-        <div class="info-cell-desc">항콜린성 부담 없음<br>Safe</div>
+        <div class="info-cell-score" style="color:var(--green)">0점</div>
+        <div class="info-cell-desc">비노출군<br>Safe</div>
       </div>
       <div class="info-cell">
-        <div class="info-cell-score" style="color:var(--green)">1점</div>
-        <div class="info-cell-desc">낮은 위험<br>Weak / Low Risk</div>
+        <div class="info-cell-score" style="color:var(--yellow)">1점</div>
+        <div class="info-cell-desc">약한 저위험군<br>Weak</div>
       </div>
       <div class="info-cell">
         <div class="info-cell-score" style="color:var(--yellow)">2점</div>
-        <div class="info-cell-desc">중등 위험 — 주의<br>Moderate Risk</div>
+        <div class="info-cell-desc">중간 저위험군<br>Moderate</div>
       </div>
       <div class="info-cell" style="border-color:#F5C6C6">
-        <div class="info-cell-score" style="color:var(--red)">≥3점</div>
-        <div class="info-cell-desc">고위험 — 처방 재검토<br>High Risk</div>
+        <div class="info-cell-score" style="color:var(--red)">3점</div>
+        <div class="info-cell-desc">고위험군<br>Strong</div>
       </div>
     </div>
   </div>
 
   <footer>
-    <p>참고 문헌: Boustani et al. (2008) · Salahudeen et al., <em>BMC Geriatrics</em> (2015) · Köşker et al., <em>BMC Pharmacology and Toxicology</em> (2025)</p>
+    <p>참고 문헌: Suh et al., <em>BMC Pharmacology and Toxicology</em> (2021) · Salahudeen et al., <em>BMC Geriatrics</em> (2015) · Köşker et al., <em>BMC Pharmacology and Toxicology</em> (2025)</p>
     <p style="margin-top:4px">본 계산기는 임상 의사결정 보조 도구이며, 최종 처방 결정은 의료 전문가에게 있습니다.</p>
   </footer>
 
