@@ -71,7 +71,7 @@
       max-width: 480px;
       line-height: 1.7;
     }
-    .acb-scale-legend {
+    .kabs-scale-legend {
       display: flex;
       gap: 1rem;
       margin-top: 1.25rem;
@@ -565,35 +565,35 @@
 
     .no-alt { font-size: 12px; color: var(--faint); font-style: italic; }
 
-    .acb-explain {
+    .kabs-explain {
       margin-bottom: 2.5rem;
       padding: 1.5rem;
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 12px;
     }
-    .acb-explain h2 {
+    .kabs-explain h2 {
       font-family: var(--serif);
       font-size: 18px;
       font-weight: 400;
       margin-bottom: 0.75rem;
       color: var(--text);
     }
-    .acb-explain p {
+    .kabs-explain p {
       font-size: 13.5px;
       color: var(--sub);
       line-height: 1.8;
       margin-bottom: 0.6rem;
     }
-    .acb-explain p:last-child { margin-bottom: 0; }
-    .acb-explain strong { color: var(--text); font-weight: 600; }
-    .acb-tags {
+    .kabs-explain p:last-child { margin-bottom: 0; }
+    .kabs-explain strong { color: var(--text); font-weight: 600; }
+    .kabs-tags {
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
       margin-top: 1rem;
     }
-    .acb-tag {
+    .kabs-tag {
       font-size: 12px;
       padding: 4px 10px;
       border-radius: 999px;
@@ -618,7 +618,7 @@
     }
     .info-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
       gap: 0.75rem;
     }
     .info-cell {
@@ -658,7 +658,7 @@
     <div class="header-label">Korean Anticholinergic Burden Scale</div>
     <h1><span style="color:#C0392B">K</span><span style="color:#D4A017">A</span><span style="color:#2D6A30">B</span><span style="color:#1A1814">S</span> <em style="color:#1A1814">Calculator</em></h1>
     <p class="header-sub">다제약물 복용자를 위한 항콜린성 부담 자동 계산기.<br>처방 약물을 입력하면 KABS 총점과 대체 약물을 추천합니다.</p>
-    <div class="acb-scale-legend">
+    <div class="kabs-scale-legend">
       <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>KABS 0 — Safe (비노출군)</div>
       <div class="legend-item"><div class="legend-dot" style="background:var(--yellow)"></div>KABS 1 — Weak (약한 저위험군)</div>
       <div class="legend-item"><div class="legend-dot" style="background:var(--yellow)"></div>KABS 2 — Moderate (중간 저위험군)</div>
@@ -666,7 +666,7 @@
     </div>
   </header>
 
-  <div class="acb-explain">
+  <div class="kabs-explain">
     <h2><span style="font-family:var(--sans);font-weight:600;">항콜린 부담</span><span style="font-family:var(--serif);">(Anticholinergic Burden)</span><span style="font-family:var(--sans);font-weight:600;">이란?</span></h2>
     <p>
       항히스타민제, 진정 수면제, 항우울제, 과민성 방광 치료제 등 다양한 약물군에서
@@ -684,15 +684,15 @@
       65세 이상 노인의 약 50%가 항콜린성 약물을 1개 이상 복용하고 있습니다.
       <em style="font-size:12px;">(Kiesel et al., 2018 · Köşker et al., 2025)</em>
     </p>
-    <div class="acb-tags">
-      <span class="acb-tag">인지기능 저하</span>
-      <span class="acb-tag">낙상 · 골절</span>
-      <span class="acb-tag">섬망 · 환각</span>
-      <span class="acb-tag">입마름</span>
-      <span class="acb-tag">변비</span>
-      <span class="acb-tag">요실금</span>
-      <span class="acb-tag">빈맥</span>
-      <span class="acb-tag">시야 흐림</span>
+    <div class="kabs-tags">
+      <span class="kabs-tag">인지기능 저하</span>
+      <span class="kabs-tag">낙상 · 골절</span>
+      <span class="kabs-tag">섬망 · 환각</span>
+      <span class="kabs-tag">입마름</span>
+      <span class="kabs-tag">변비</span>
+      <span class="kabs-tag">요실금</span>
+      <span class="kabs-tag">빈맥</span>
+      <span class="kabs-tag">시야 흐림</span>
     </div>
   </div>
 
