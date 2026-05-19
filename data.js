@@ -309,9 +309,6 @@ const INGREDIENT_DB = [
   {en:"Zolmitriptan", kr:"졸미트립탄", score:0, level:"Safe", classKR:"진통제"},
   
   // ACB 3점 (Strong) — 엑셀 DB 기준 41종
-  {en:"Dicyclomine(dicycloverine)", kr:"디사이클로민",                   score:3, level:"Strong", classKR:"위장관 진경제"},
-  {en:"Pyrilamine(mepiramine)",     kr:"피릴라민(메피라민)",              score:3, level:"Strong", classKR:"항히스타민제"},
-  {en:"Scopolamine butylbromide",   kr:"스코폴라민 부틸브롬화물",         score:3, level:"Strong", classKR:"위장관 진경제"},
   {en:"Amitriptyline",      kr:"아미트리프틸린",        score:3, level:"Strong",   classKR:"삼환계 항우울제"},
   {en:"Atropine",           kr:"아트로핀",              score:3, level:"Strong",   classKR:"진경제/항무스카린제"},
   {en:"Benztropine",        kr:"벤즈트로핀",            score:3, level:"Strong",   classKR:"항파킨슨제"},
