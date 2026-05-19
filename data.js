@@ -428,7 +428,7 @@ const INGREDIENT_DB = [
   {en:"Ziprasidone",        kr:"지프라시돈",             score:1, level:"Weak",     classKR:"항정신병약"},
 ];
 
-// ── 복합제 브랜드 → 성분 목록 매핑 (4084종) ──────────────────
+// ── 복합제 브랜드 → 성분 목록 매핑 (4082종) ──────────────────
 const COMPLEX_DRUG_MAP = {
   "가네진정": ["Carnitine", "Cyanocobalamin", "Pyridoxine"],
   "가네탑골드연질캡슐": ["Cyanocobalamin", "Pyridoxine", "Thiamine"],
@@ -449,11 +449,9 @@ const COMPLEX_DRUG_MAP = {
   "게리드엠정": ["Glimepiride", "Metformin"],
   "게리메트정": ["Glimepiride", "Metformin"],
   "게메론골드정": ["Potassium", "Thiamine"],
-  "게메론에스연질캡슐": ["Potassium", "Thiamine"],
-  "게메론에스연질캡슐": ["Ascorbic acid", "Cyanocobalamin", "Ergocalciferol", "Magnesium preparations", "Pyridoxine"],
+  "게메론에스연질캡슐": ["Ascorbic acid", "Cyanocobalamin", "Ergocalciferol", "Magnesium preparations", "Pyridoxine", "Potassium", "Thiamine"],
   "게메론코큐텐정": ["Potassium", "Thiamine"],
   "게메론코큐텐정": ["Ascorbic acid", "Cyanocobalamin", "Ergocalciferol", "Folic acid", "Magnesium preparations", "Pyridoxine", "Ubidecarenone"],
-  "게므론골드정": ["Ascorbic acid", "Cyanocobalamin", "Ergocalciferol", "Folic acid", "Magnesium preparations", "Pyridoxine", "Ubidecarenone"],
   "게므론골드정": ["Ascorbic acid", "Cyanocobalamin", "Ergocalciferol", "Folic acid", "Magnesium preparations", "Pyridoxine", "Ubidecarenone"],
   "게므론에스연질캡슐": ["Ascorbic acid", "Cyanocobalamin", "Ergocalciferol", "Magnesium preparations", "Pyridoxine"],
   "게므론코큐텐정": ["Ascorbic acid", "Cyanocobalamin", "Ergocalciferol", "Folic acid", "Magnesium preparations", "Pyridoxine", "Ubidecarenone"],
