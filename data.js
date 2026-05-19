@@ -352,7 +352,6 @@ const INGREDIENT_DB = [
   {en:"Trospium",           kr:"트로스피움",             score:3, level:"Strong",   classKR:"비뇨기계 진경제"},
 
   // ACB 2점 (Moderate) — 엑셀 DB 기준 22종
-  {en:"Levomepromazine(Methotrimeprazine)", kr:"레보메프로마진(메토트리메프라진)", score:2, level:"Moderate", classKR:"항정신병약"},
   {en:"Amantadine",         kr:"아만타딘",               score:2, level:"Moderate", classKR:"항파킨슨제"},
   {en:"Cimetidine",         kr:"시메티딘",               score:2, level:"Moderate", classKR:"H2 차단제"},
   {en:"Clidinium",          kr:"클리디늄",               score:2, level:"Moderate", classKR:"위장관 항콜린제"},
